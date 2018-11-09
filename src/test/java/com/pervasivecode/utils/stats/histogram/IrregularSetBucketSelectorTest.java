@@ -10,7 +10,8 @@ public class IrregularSetBucketSelectorTest {
 
   @Test
   public void constructor_withEmptyMaxValueSet_shouldWork() {
-    IrregularSetBucketSelector<String> bucketer = new IrregularSetBucketSelector<>(ImmutableSortedSet.of());
+    IrregularSetBucketSelector<String> bucketer =
+        new IrregularSetBucketSelector<>(ImmutableSortedSet.of());
     assertThat(bucketer.bucketIndexFor("Hello")).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor("Bucketing")).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor("World")).isEqualTo(0);
@@ -22,10 +23,11 @@ public class IrregularSetBucketSelectorTest {
         new IrregularSetBucketSelector<>(ImmutableSortedSet.of(-1000, 1000));
     assertThat(bucketer.numBuckets()).isEqualTo(3);
   }
-  
+
   @Test
   public void bucketIndexFor_withSingleMaxValueSet_shouldReturnZeroOrOne() {
-    IrregularSetBucketSelector<String> bucketer = new IrregularSetBucketSelector<>(ImmutableSortedSet.of("X"));
+    IrregularSetBucketSelector<String> bucketer =
+        new IrregularSetBucketSelector<>(ImmutableSortedSet.of("X"));
     assertThat(bucketer.bucketIndexFor("Foo")).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor("Zig!")).isEqualTo(1);
   }
@@ -44,13 +46,15 @@ public class IrregularSetBucketSelectorTest {
 
   @Test
   public void maxValueForBucket_withSingleMaxValueSet_shouldReturnThatValueOrNull() {
-    IrregularSetBucketSelector<String> bucketer = new IrregularSetBucketSelector<>(ImmutableSortedSet.of("X"));
+    IrregularSetBucketSelector<String> bucketer =
+        new IrregularSetBucketSelector<>(ImmutableSortedSet.of("X"));
     assertThat(bucketer.bucketUpperBound(0)).isEqualTo("X");
     try {
       bucketer.bucketUpperBound(1);
       Truth.assert_().fail();
     } catch (IllegalArgumentException e) {
-      assertThat(e).hasMessage(IrregularSetBucketSelector.NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE);
+      assertThat(e).hasMessageThat()
+          .isEqualTo(IrregularSetBucketSelector.NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE);
     }
   }
 
@@ -64,7 +68,8 @@ public class IrregularSetBucketSelectorTest {
       assertThat(bucketer.bucketUpperBound(2)).isNull();
       Truth.assert_().fail("Expected IllegalArgumentException.");
     } catch (IllegalArgumentException iae) {
-      assertThat(iae).hasMessage(IrregularSetBucketSelector.NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE);
+      assertThat(iae).hasMessageThat()
+          .isEqualTo(IrregularSetBucketSelector.NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE);
     }
   }
 }

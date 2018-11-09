@@ -15,7 +15,7 @@ public class ImmutableHistogramTest {
           .setBucketUpperBounds(ImmutableList.of((byte) 0x00, (byte) 0xff)).build();
       Truth.assert_().fail();
     } catch (IllegalStateException ise) {
-      assertThat(ise).hasMessage("Missing required properties: countByBucket");
+      assertThat(ise).hasMessageThat().isEqualTo("Missing required properties: countByBucket");
     }
   }
 
@@ -28,7 +28,7 @@ public class ImmutableHistogramTest {
       builder.build();
       Truth.assert_().fail();
     } catch (IllegalStateException ise) {
-      assertThat(ise).hasMessage("countByBucket cannot be empty");
+      assertThat(ise).hasMessageThat().isEqualTo("countByBucket cannot be empty");
     }
   }
 
@@ -38,7 +38,7 @@ public class ImmutableHistogramTest {
       ImmutableHistogram.<Byte>builder().setCountByBucket(ImmutableList.of(42L)).build();
       Truth.assert_().fail();
     } catch (IllegalStateException ise) {
-      assertThat(ise).hasMessage("Missing required properties: bucketUpperBounds");
+      assertThat(ise).hasMessageThat().isEqualTo("Missing required properties: bucketUpperBounds");
     }
   }
 
@@ -52,7 +52,8 @@ public class ImmutableHistogramTest {
       builder.build();
       Truth.assert_().fail();
     } catch (IllegalStateException ise) {
-      assertThat(ise).hasMessage("Wrong number of bucketUpperBounds values. (Expected 4, got 5)");
+      assertThat(ise).hasMessageThat()
+          .isEqualTo("Wrong number of bucketUpperBounds values. (Expected 4, got 5)");
     }
 
     try {
@@ -62,7 +63,8 @@ public class ImmutableHistogramTest {
       builder.build();
       Truth.assert_().fail();
     } catch (IllegalStateException ise) {
-      assertThat(ise).hasMessage("Wrong number of bucketUpperBounds values. (Expected 4, got 3)");
+      assertThat(ise).hasMessageThat()
+          .isEqualTo("Wrong number of bucketUpperBounds values. (Expected 4, got 3)");
     }
   }
 
@@ -105,7 +107,8 @@ public class ImmutableHistogramTest {
       histogram.bucketUpperBound(2);
       Truth.assert_().fail("Expected an IllegalArgumentException.");
     } catch (IllegalArgumentException iae) {
-      assertThat(iae).hasMessage(ImmutableHistogram.NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE);
+      assertThat(iae).hasMessageThat()
+          .isEqualTo(ImmutableHistogram.NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE);
     }
   }
 
