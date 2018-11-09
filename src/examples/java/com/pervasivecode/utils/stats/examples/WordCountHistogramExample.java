@@ -4,7 +4,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -36,12 +38,29 @@ public class WordCountHistogramExample implements ExampleApplication {
     BucketSelector<Long> bucketer = BucketSelectors.powerOf2LongValues(0, 5);
     MutableHistogram<Long> histo = new ConcurrentHistogram<>(bucketer);
 
-    // ConcurrentHistogram is thread-safe, so go ahead and tokenize->filter->count in parallel.
+    Predicate<String> isWord = Pattern.compile("\\w+").asPredicate();
     Splitter whitespaceSplitter = Splitter.on(Pattern.compile("\\s+"));
+
+    // ConcurrentHistogram is thread-safe, so go ahead and tokenize->filter->count in parallel.
     lines.parallelStream() //
         .flatMap((line) -> whitespaceSplitter.splitToList(line).stream()) //
-        .filter(Pattern.compile("\\w+").asPredicate()) //
-        .forEach((w) -> histo.countValue((long) w.length()));
+        .filter(isWord).forEach((w) -> histo.countValue((long) w.length()));
+
+    // Count words in an array that doesn't do bucketing.
+    AtomicIntegerArray wordCounts = new AtomicIntegerArray(13);
+    lines.parallelStream() //
+        .flatMap((line) -> whitespaceSplitter.splitToList(line).stream()) //
+        .filter(isWord) //
+        .forEach((w) -> wordCounts.incrementAndGet(w.length() - 1));
+    output.println("Characters per word:");
+    int numWords = 0;
+    for (int i = 0; i < wordCounts.length(); i++) {
+      numWords++;
+      output.println(String.format("%d chars:\t%d", i + 1, wordCounts.get(i)));
+    }
+    output.print("Total number of words: ");
+    output.print(numWords);
+    output.println();
 
     // TODO make and then use a non-quantity version of ConsoleHistogramQuantityFormatter,
     // to avoid all this unnecessary setup for a unitless value.
@@ -49,11 +68,6 @@ public class WordCountHistogramExample implements ExampleApplication {
     ServiceProvider measureServiceProvider = ServiceProvider.current();
     QuantityFactory<Dimensionless> qtyFactory =
         measureServiceProvider.getQuantityFactory(Dimensionless.class);
-//    Unit<Dimensionless> dimensionlessUnit = measureServiceProvider
-//        .getSystemOfUnitsService()
-//        .getSystemOfUnits("SI")
-//        .getSystemOfUnits()
-//        .getUnit(Dimensionless.class);
     Unit<Dimensionless> dimensionlessUnit = AbstractUnit.ONE;
     QuantityFormatter<Dimensionless> formatter = new QuantityFormatter<Dimensionless>() {
       @Override
@@ -68,9 +82,9 @@ public class WordCountHistogramExample implements ExampleApplication {
         (val) -> qtyFactory.create(val, dimensionlessUnit);
     Histogram<Quantity<Dimensionless>> histoAsDimensionless =
         Histograms.transformValues(histo, transformation);
-    String formattedHistogram = histoFormatter.format(histoAsDimensionless);
-    output.println("Letters per word:");
-    output.println(formattedHistogram);
+
+    output.println("As a histogram:");
+    output.println(histoFormatter.format(histoAsDimensionless));
   }
 
   public static void main(String[] args) throws Exception {
