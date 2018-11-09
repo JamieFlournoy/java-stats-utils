@@ -4,13 +4,12 @@ import java.time.Duration;
 import java.util.Optional;
 
 /**
- * This object can estimate the rate at which a repeatedly provided "progress so far" scalar value
- * is currently changing, and can estimate how long it will take for that value to reach a specified
- * target value.
+ * This object can estimate the rate at which a repeatedly set progress value is currently changing,
+ * and can estimate how long it will take for that value to reach a specified target value.
  */
 public interface DurationEstimator {
   /**
-   * Set the "progress so far" counter to the specified value.
+   * Set the progress counter to the specified value.
    *
    * @param amountSoFar The current total amount of progress in whatever units the caller wants to
    *        track.
