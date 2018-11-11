@@ -52,6 +52,15 @@ public class QuantityBucketSelectorsTest {
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(100_000_001, sqFt))).isEqualTo(7);
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(1_000_000_000, sqFt))).isEqualTo(7);
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(10_000_000_000L, sqFt))).isEqualTo(7);
+
+    Unit<Area> acre = USCustomary.ACRE;
+    bucketer = QuantityBucketSelectors.exponential(5, acre, quantityFactory, 0, 5);
+
+    assertThat(bucketer.bucketIndexFor(quantityFactory.create(1, acre))).isEqualTo(0);
+    assertThat(bucketer.bucketIndexFor(quantityFactory.create(5, acre))).isEqualTo(1);
+    assertThat(bucketer.bucketIndexFor(quantityFactory.create(25, acre))).isEqualTo(2);
+    assertThat(bucketer.bucketIndexFor(quantityFactory.create(125, acre))).isEqualTo(3);
+    assertThat(bucketer.bucketIndexFor(quantityFactory.create(126, acre))).isEqualTo(4);
   }
 
   @Test
