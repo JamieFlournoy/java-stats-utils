@@ -11,7 +11,7 @@ import com.pervasivecode.utils.stats.histogram.ConcurrentHistogram;
 
 public class ConcurrentHistogramTest {
   @Mock private BucketSelector<Float> bucketer;
-  
+
   private ConcurrentHistogram<Float> histogram;
 
   @Before
@@ -31,7 +31,7 @@ public class ConcurrentHistogramTest {
     when(bucketer.bucketUpperBound(5)).thenReturn(12345f);
     assertThat(histogram.bucketUpperBound(5)).isWithin(0).of(12345f);
   }
-  
+
   @Test
   public void countInBucket_shouldChangeAfterCountValue() {
     assertThat(histogram.countInBucket(5)).isEqualTo(0);

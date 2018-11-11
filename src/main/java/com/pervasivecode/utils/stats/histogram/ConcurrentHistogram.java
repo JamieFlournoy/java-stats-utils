@@ -24,9 +24,9 @@ public class ConcurrentHistogram<T> implements MutableHistogram<T> {
 
   @Override
   public T bucketUpperBound(int index) {
-    return bucketer.bucketUpperBound(index); 
+    return bucketer.bucketUpperBound(index);
   }
-  
+
   @Override
   public long countInBucket(int index) {
     return bucketCounts.get(index);

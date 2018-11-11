@@ -20,7 +20,7 @@ public class IrregularSetBucketSelector<T> implements BucketSelector<T> {
 
   /**
    * Create a IrregularSetBucketSelector from a set of upper-bound values.
-   * 
+   *
    * @param upperBoundValueSet The upper bound values for the buckets. (There will also be one more
    *        bucket that has no upper bound.)
    */

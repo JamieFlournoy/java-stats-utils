@@ -19,7 +19,7 @@ public class ConsoleHistogramQuantityFormatterTest {
   private QuantityFactory<Time> quantityOfTimeFactory;
   private ConsoleHistogramQuantityFormatter<Time> formatter;
 
-  
+
   @Before
   public void setUp() throws Exception {
     ServiceProvider measureServiceProvider = ServiceProvider.current();

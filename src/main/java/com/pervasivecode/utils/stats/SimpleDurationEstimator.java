@@ -36,7 +36,7 @@ public class SimpleDurationEstimator implements DurationEstimator {
 
   /**
    * Create and start a SimpleDurationEstimator, with an initial progress value of zero.
-   * 
+   *
    * @param timeSource The source of time to be used to determine how much time has elapsed.
    */
   public SimpleDurationEstimator(TimeSource timeSource) {
@@ -46,7 +46,7 @@ public class SimpleDurationEstimator implements DurationEstimator {
   /**
    * Create and start a SimpleDurationEstimator, with an initial progress value specified by the
    * caller.
-   * 
+   *
    * @param timeSource The source of time to be used to determine how much time has elapsed.
    * @param initialProgressValue The initial value to be used when estimating progress.
    */
@@ -59,7 +59,7 @@ public class SimpleDurationEstimator implements DurationEstimator {
 
   /**
    * Replace the existing progress amount value with a new one.
-   * 
+   *
    * @param newAmount The new progress amount.
    */
   @Override
@@ -69,7 +69,7 @@ public class SimpleDurationEstimator implements DurationEstimator {
 
   /**
    * Get an estimate of the rate of change of the progress amount per second.
-   * 
+   *
    * @return The estimated rate.
    */
   @Override
@@ -84,7 +84,7 @@ public class SimpleDurationEstimator implements DurationEstimator {
   /**
    * Using the current estimatedRateAsAmountPerSecond, predict how much time would be needed to
    * process a specified amount starting now.
-   * 
+   *
    * @param amountLeft The amount whose processing time is to be estimated.
    * @return The amount of time that would be required to process the specified amount, given the
    *         current estimated rate.

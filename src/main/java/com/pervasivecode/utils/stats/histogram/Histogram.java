@@ -25,14 +25,14 @@ package com.pervasivecode.utils.stats.histogram;
  * <li>"Zenith" would go in the last (5th) bucket, since it's greater than the last
  * upper-bound-value, "Wang".</li>
  * </ul>
- * 
+ *
  * @param <T> The type of value that is being counted.
  */
 public interface Histogram<T> extends BucketingSystem<T> {
   /**
    * Get the number of elements that were counted in the specified bucket. The first bucket has an
    * index of 0.
-   * 
+   *
    * @param index The bucket number to examine.
    * @return The count of values in the specified bucket.
    */

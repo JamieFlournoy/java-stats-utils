@@ -53,7 +53,7 @@ public class PowerPlantCapacityHistogramExample implements ExampleApplication {
     for (String line : lines) {
       histo.countValue(Quantities.getQuantity(Double.parseDouble(line), inputFileUnit));
     }
-    
+
     QuantityPrefixSelector prefixer = new SiPrefixSelector();
     NumberFormat numFormatter = NumberFormat.getInstance(Locale.US);
     QuantityFormatter<Power> formatter = new ScalingFormatter<>(baseUnit, prefixer, numFormatter);

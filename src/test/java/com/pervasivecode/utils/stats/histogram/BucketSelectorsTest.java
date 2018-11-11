@@ -46,7 +46,7 @@ public class BucketSelectorsTest {
   @Test
   public void linear_shouldBucketCorrectly() {
     BucketSelector<Long> bucketer = BucketSelectors.linearLongValues(-1000, 2000, 5);
-    
+
     assertThat(bucketer.bucketIndexFor(-2000L)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(-1000L)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(-999L)).isEqualTo(1);
@@ -65,7 +65,7 @@ public class BucketSelectorsTest {
 
     assertThat(bucketer.bucketIndexFor(3000L)).isEqualTo(4);
   }
-  
+
   @Test
   public void linear_shouldReturnUpperBoundsCorrectly() {
     BucketSelector<Long> bucketer = BucketSelectors.linearLongValues(-1000, 2000, 5);
