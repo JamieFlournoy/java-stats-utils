@@ -32,6 +32,7 @@ apply plugin: 'net.ltgt.errorprone'
 
 repositories {
     jcenter()
+    mavenLocal()
 }
 
 dependencies {
@@ -52,7 +53,7 @@ dependencies {
     annotationProcessor 'com.google.auto.value:auto-value:1.6.2'
 
     implementation group: 'com.pervasivecode', name: 'java-time-utils', version: '0.9'
-    implementation group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9'
+    implementation group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.1-SNAPSHOT'
 
     // Dependencies needed for running tests:
     testImplementation 'junit:junit:4.12'

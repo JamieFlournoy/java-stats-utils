@@ -21,11 +21,11 @@ public class BucketSelectors {
    * @param numBuckets The number of buckets.
    * @return A {@code BucketSelector<Long>} instance.
    */
+  // TODO replace these with a ConvertingBucketSelector based on a com.google.common.base.Converter
   public static BucketSelector<Long> powerOf2LongValues(int minPower, final int numBuckets) {
     checkArgument(minPower >= 0, "minPower must be non-negative.");
-    checkArgument(numBuckets > 0, "size must be greater than 0.");
+    checkArgument(numBuckets > 0, "numBuckets must be greater than 0.");
     final int lastBucketIndex = numBuckets - 1;
-
     return new BucketSelector<>() {
       @Override
       public int numBuckets() {

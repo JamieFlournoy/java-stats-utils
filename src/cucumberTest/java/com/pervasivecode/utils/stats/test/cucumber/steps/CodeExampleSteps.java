@@ -5,8 +5,9 @@ import static com.google.common.truth.Truth.assertThat;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import com.pervasivecode.utils.stats.examples.WordCountHistogramExample;
 import com.pervasivecode.utils.stats.examples.ExampleApplication;
+import com.pervasivecode.utils.stats.histogram.example.WordCountHistogramExample;
+import com.pervasivecode.utils.stats.histogram.measure.example.PowerPlantCapacityHistogramExample;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -18,6 +19,11 @@ public class CodeExampleSteps {
   @Given("^I am running the Word Count Histogram Example$")
   public void iAmRunningTheWordCountHistogramExample() {
     iAmRunningTheExample(new WordCountHistogramExample());
+  }
+
+  @Given("^I am running the Power Plant Capacity Histogram Example$")
+  public void iAmRunningThePowerPlantCapacityHistogramExample() {
+    iAmRunningTheExample(new PowerPlantCapacityHistogramExample());
   }
 
   private void iAmRunningTheExample(ExampleApplication exampleClass) {
