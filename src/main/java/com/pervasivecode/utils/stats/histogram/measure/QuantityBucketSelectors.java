@@ -74,7 +74,8 @@ public class QuantityBucketSelectors {
   public static <T extends Quantity<T>> BucketSelector<Quantity<T>> linear(Unit<T> baseUnit,
       QuantityFactory<T> quantityFactory, Quantity<T> lowestUpperBound,
       Quantity<T> highestUpperBound, int numBuckets) {
-    Converter<Quantity<T>, Long> transformer = QuantityConverters.quantityToLongTransformer(baseUnit, quantityFactory);
+    Converter<Quantity<T>, Long> transformer =
+        QuantityConverters.quantityToLongTransformer(baseUnit, quantityFactory);
 
     long lowestUpperBoundQty = transformer.convert(lowestUpperBound);
     long highestUpperBoundQty = transformer.convert(highestUpperBound);

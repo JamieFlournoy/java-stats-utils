@@ -39,6 +39,7 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
 
   /**
    * Obtain a builder that allows construction of a new instance.
+   * 
    * @param <V> The type of value counted by this Histogram.
    * @return A new, empty Builder instance.
    */

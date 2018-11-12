@@ -7,11 +7,11 @@ import java.util.function.Function;
 import com.google.common.base.Strings;
 
 /**
- * Render a vertical list of histogram buckets with horizontal bar graphs showing the count in
- * each bucket.
+ * Render a vertical list of histogram buckets with horizontal bar graphs showing the count in each
+ * bucket.
  *
  * @param <T> The type of value the histogram counted, which this formatter will format using the
- * provided {@code upperBoundValueFormatter} parameter.
+ *        provided {@code upperBoundValueFormatter} parameter.
  */
 public class ConsoleHistogramFormatter<T> {
   private final Function<T, String> upperBoundValueFormatter;

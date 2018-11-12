@@ -45,8 +45,7 @@ public class QuantityBucketSelectorsTest {
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(256L, tesla))).isEqualTo(8);
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(513L, tesla))).isEqualTo(9);
 
-    bucketer =
-        QuantityBucketSelectors.powerOf2(2, tesla, quantityFactory, 5);
+    bucketer = QuantityBucketSelectors.powerOf2(2, tesla, quantityFactory, 5);
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(0L, tesla))).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(4L, tesla))).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(quantityFactory.create(31L, tesla))).isEqualTo(3);
@@ -67,8 +66,7 @@ public class QuantityBucketSelectorsTest {
     assertThat(bucketer.bucketUpperBound(2)).isEqualTo(quantityFactory.create(4L, tesla));
     assertThat(bucketer.bucketUpperBound(5)).isEqualTo(quantityFactory.create(32L, tesla));
 
-    bucketer =
-        QuantityBucketSelectors.powerOf2(2, tesla, quantityFactory, 5);
+    bucketer = QuantityBucketSelectors.powerOf2(2, tesla, quantityFactory, 5);
     assertThat(bucketer.bucketUpperBound(0)).isEqualTo(quantityFactory.create(4L, tesla));
     assertThat(bucketer.bucketUpperBound(3)).isEqualTo(quantityFactory.create(32L, tesla));
   }

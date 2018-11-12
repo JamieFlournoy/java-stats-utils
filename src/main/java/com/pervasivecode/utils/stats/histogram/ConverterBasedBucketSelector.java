@@ -9,9 +9,7 @@ public class ConverterBasedBucketSelector<T> implements BucketSelector<T> {
   private final Integer numBuckets;
   private final Converter<T, Integer> converter;
 
-  public ConverterBasedBucketSelector(
-      Converter<T, Integer> converter,
-      int numBuckets) {
+  public ConverterBasedBucketSelector(Converter<T, Integer> converter, int numBuckets) {
     this.converter = checkNotNull(converter);
     checkArgument(numBuckets > 0, "numBuckets must be greater than 0.");
     this.numBuckets = numBuckets;

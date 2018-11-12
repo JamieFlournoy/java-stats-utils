@@ -10,7 +10,8 @@ import com.pervasivecode.utils.stats.histogram.BucketSelector;
 import com.pervasivecode.utils.stats.histogram.ConcurrentHistogram;
 
 public class ConcurrentHistogramTest {
-  @Mock private BucketSelector<Float> bucketer;
+  @Mock
+  private BucketSelector<Float> bucketer;
 
   private ConcurrentHistogram<Float> histogram;
 

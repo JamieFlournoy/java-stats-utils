@@ -1,4 +1,4 @@
- package com.pervasivecode.utils.stats;
+package com.pervasivecode.utils.stats;
 
 import java.time.Duration;
 import java.util.Optional;

@@ -3,7 +3,6 @@ package com.pervasivecode.utils.stats;
 import static com.google.common.truth.Truth.assertThat;
 import java.time.Duration;
 import java.util.Optional;
-
 import org.junit.Before;
 import org.junit.Test;
 import com.pervasivecode.utils.stats.SimpleDurationEstimator;

@@ -70,7 +70,7 @@ public class ImmutableHistogramTest {
 
   @Test
   public void builder_withEmptyBucketUpperBounds_shouldBuild() {
-    ImmutableHistogram.Builder<Byte> builder = ImmutableHistogram.<Byte>builder();
+    ImmutableHistogram.Builder<Byte> builder = ImmutableHistogram.builder();
     builder.setCountByBucket(ImmutableList.of(42L));
     builder.setBucketUpperBounds(ImmutableList.of());
     builder.build();

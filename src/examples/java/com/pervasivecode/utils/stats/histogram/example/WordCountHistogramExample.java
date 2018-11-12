@@ -55,7 +55,7 @@ public class WordCountHistogramExample implements ExampleApplication {
     output.println();
 
     ConsoleHistogramFormatter<Long> histoFormatter =
-        new ConsoleHistogramFormatter<Long>((v)->v.toString(), 60);
+        new ConsoleHistogramFormatter<Long>((v) -> v.toString(), 60);
 
     output.println("As a histogram:");
     output.println(histoFormatter.format(histo));
