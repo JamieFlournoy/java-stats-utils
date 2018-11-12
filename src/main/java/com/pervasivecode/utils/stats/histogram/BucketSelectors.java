@@ -10,8 +10,22 @@ import com.google.common.base.Converter;
 
 /**
  * BucketSelector factory methods for basic bucketing strategies.
+ *
+ * @see BucketingSystem
  */
 public class BucketSelectors {
+  /**
+   * Wrap a BucketSelector that handles one value type inside one that handles a different value
+   * type, using a Converter that converts individual values from one type to the other.
+   *
+   * @param input The existing BucketSelector instance, which handles value type T. This is
+   *        encapsulated inside a returned BucketSelector that handles value type V.
+   * @param transformer A {@link Converter} that can change values of type T into V and values of
+   *        type V into T.
+   * @param <T> The value type of the existing input BucketSelector.
+   * @param <V> The value type of the BucketSelector that this method will return.
+   * @return A BucketSelector that can handle the value type V.
+   */
   public static <T, V> BucketSelector<V> transform(BucketSelector<T> input,
       Converter<V, T> transformer) {
     return new BucketSelector<V>() {
@@ -36,13 +50,14 @@ public class BucketSelectors {
   /**
    * Get a BucketSelector that has upper bound values that are consecutive whole-number powers of 2.
    * <p>
-   * Example: upper bound values 4, 8, 16, 32.
+   * Example: arguments {@code minPower=2} and {@code numBuckets=5} would generate upper bound
+   * values 4, 8, 16, and 32.
    *
    * @param minPower The smallest power of 2 to use when generating upper bound values.
-   * @param numBuckets The number of buckets.
+   * @param numBuckets The number of buckets that the BucketSelector should provide.
    * @return A {@code BucketSelector<Long>} instance.
    */
-  public static BucketSelector<Long> powerOf2LongValues(int minPower, final int numBuckets) {
+  public static BucketSelector<Long> powerOf2LongValues(int minPower, int numBuckets) {
     checkArgument(minPower >= 0, "minPower must be non-negative.");
 
     Converter<Long, Integer> converter = new Converter<>() {
@@ -69,18 +84,20 @@ public class BucketSelectors {
   }
 
   /**
-   * Get a BucketSelector that has upper bound values that are {@code <T>} instances that are part
-   * of an exponential series.
+   * Get a BucketSelector that has upper bound values that are {@code double} values that are part
+   * of an exponential series. Each bucket value's exponent is 1.0 plus the exponent of the previous
+   * bucket value.
    * <p>
-   * Example: upper bound values 1, 5, 25, 125
+   * Example: arguments {@code base=5.0}, {@code minPower=0.0}, and {@code numBuckets=5} would
+   * generate base and exponent values of 5<sup>0</sup>, 5<sup>1</sup>, 5<sup>2</sup>, and
+   * 5<sup>3</sup>, so the upper bound values would be 1.0, 5.0, 25.0, and 125.0.
    *
    * @param base The base that will be raised to the specified exponents to generate upper bound
    *        values.
    * @param minPower The smallest exponent to use when generating upper bound values.
    * @param numBuckets The number of buckets into which values should be counted.
-   * @param <T> The type of measurement described by the bucket upper bounds. Example: Length.
    *
-   * @return A {@code BucketSelector<Quantity<T>>} instance.
+   * @return A {@code BucketSelector<Double>} instance.
    */
   public static BucketSelector<Double> exponential(double base, double minPower, int numBuckets) {
     double logOfBase = Math.log(base);
@@ -115,7 +132,8 @@ public class BucketSelectors {
    * Get a BucketSelector that has upper bound values that are evenly distributed between a smallest
    * and largest value.
    * <p>
-   * Example: 0, 5, 10, 15, 20.
+   * Example: arguments {@code lowestUpperBound=0}, {@code highestUpperBound=20}, and
+   * {@code numBuckets=6} would generate upper bound values 0, 5, 10, 15, and 20.
    *
    * @param lowestUpperBound The upper-bound value for the first bucket (index 0).
    * @param highestUpperBound The upper-bound value for the next-to-last bucket

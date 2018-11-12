@@ -27,6 +27,7 @@ package com.pervasivecode.utils.stats.histogram;
  * </ul>
  *
  * @param <T> The type of value that is being counted.
+ * @see BucketingSystem
  */
 public interface Histogram<T> extends BucketingSystem<T> {
   /**

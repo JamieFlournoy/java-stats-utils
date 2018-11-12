@@ -7,8 +7,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 
 /**
- * BucketSelector for use with an irregular set of buckets, such as {1, 5, 7}, that is most easily
- * expressed as a literal list.
+ * This BucketSelector counts values in buckets that have an irregular set of bucket upper bound
+ * values, such as {1, 5, 7}, that are most easily expressed explicitly, rather than by a formula
+ * that generates a series of upper bound values.
+ *
+ * @see BucketingSystem
  */
 public class IrregularSetBucketSelector<T> implements BucketSelector<T> {
   static final String NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE =

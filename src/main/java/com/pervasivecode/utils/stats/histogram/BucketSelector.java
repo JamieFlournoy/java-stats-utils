@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
  *
  * @param <T> The type of value that this BucketSelector will handle by selecting an appropriate
  *        bucket index.
+ * @see BucketingSystem
  */
 public interface BucketSelector<T> extends BucketingSystem<T> {
   /**

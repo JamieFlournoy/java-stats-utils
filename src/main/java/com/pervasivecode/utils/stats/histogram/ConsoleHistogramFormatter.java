@@ -7,24 +7,43 @@ import java.util.function.Function;
 import com.google.common.base.Strings;
 
 /**
- * Render a vertical list of histogram buckets with horizontal bar graphs showing the count in each
- * bucket.
+ * Format {@link Histogram} contents for a text display. The formatted output consists of a vertical
+ * list of labeled histogram buckets, with horizontal bar graphs showing the count in each bucket,
+ * followed by a percentage that represents the number of items counted in this bucket as a fraction
+ * of all items counted by this histogram.
+ * <p>
+ * Example:
+ * 
+ * <pre>
+ *     &lt;= 1 ******                                                         4%
+ *     &lt;= 2 *********************                                         15%
+ *     &lt;= 4 ************************************************************  43%
+ *     &lt;= 8 ************************************************              34%
+ *     &gt;  8 *****                                                          4%
+ * </pre>
  *
  * @param <T> The type of value the histogram counted, which this formatter will format using the
  *        provided {@code upperBoundValueFormatter} parameter.
+ * @see BucketingSystem
  */
 public class ConsoleHistogramFormatter<T> {
   private final Function<T, String> upperBoundValueFormatter;
-  private final int maxWidth;
+  private final int maxBarGraphWidth;
 
-  public ConsoleHistogramFormatter(Function<T, String> upperBoundValueFormatter) {
-    this(upperBoundValueFormatter, 20);
-  }
-
-  public ConsoleHistogramFormatter(Function<T, String> upperBoundValueFormatter, int maxWidth) {
-    checkArgument(maxWidth > 1, "maxWidth must be at least 2.");
+  /**
+   * Create a ConsoleHistogramFormatter that formats upper bound values using
+   * {@code upperBoundValueFormatter}.
+   * 
+   * @param upperBoundValueFormatter A Function that converts an upper bound value into a String
+   *        representation.
+   * @param maxBarGraphWidth The maximum width of the bar graph portion of the formatted
+   *        representation.
+   */
+  public ConsoleHistogramFormatter(Function<T, String> upperBoundValueFormatter,
+      int maxBarGraphWidth) {
+    checkArgument(maxBarGraphWidth > 1, "maxWidth must be at least 2.");
     this.upperBoundValueFormatter = checkNotNull(upperBoundValueFormatter);
-    this.maxWidth = maxWidth;
+    this.maxBarGraphWidth = maxBarGraphWidth;
   }
 
   public String format(Histogram<T> histogram) {
@@ -75,12 +94,12 @@ public class ConsoleHistogramFormatter<T> {
       final String paddedBucketLabel = Strings.padEnd(bucketLabel, maxBucketLabelLength, ' ');
       final double bucketValueAsFractionOfMax = (double) bucketValue / maxCount;
       final double bucketValueAsFractionOfTotal = (double) bucketValue / totalCount;
-      final int numStars = (int) Math.round(bucketValueAsFractionOfMax * maxWidth);
+      final int numStars = (int) Math.round(bucketValueAsFractionOfMax * maxBarGraphWidth);
       final int percent = (int) Math.round(bucketValueAsFractionOfTotal * 100);
       sb.append(paddedBucketLabel);
       sb.append(' ');
       sb.append(Strings.padEnd("", numStars, '*'));
-      sb.append(Strings.padEnd("", maxWidth - numStars, ' '));
+      sb.append(Strings.padEnd("", maxBarGraphWidth - numStars, ' '));
       sb.append(' ');
       sb.append(String.format("%3d%%", percent));
       sb.append('\n');

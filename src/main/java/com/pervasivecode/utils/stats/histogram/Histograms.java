@@ -2,6 +2,9 @@ package com.pervasivecode.utils.stats.histogram;
 
 import java.util.function.Function;
 
+/**
+ * Utility methods for working with Histograms.
+ */
 public class Histograms {
   /**
    * Transform a histogram's upper bound values using a Function.
@@ -12,6 +15,7 @@ public class Histograms {
    * @param <V> The type of value emitted by the {@code transformation} {@link Function}.
    * @return A Histogram wrapping the input histogram, whose bucketUpperBound values are the
    *         transformed version of the input histogram's bucketUpperBound values.
+   * @see BucketingSystem
    */
   public static <T, V> Histogram<V> transformValues(Histogram<T> input,
       Function<T, V> transformation) {
@@ -32,5 +36,4 @@ public class Histograms {
       }
     };
   }
-
 }

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLongArray;
  * A thread-safe Histogram based on the {@link AtomicLongArray} class.
  *
  * @param <T> The type of value counted by this Histogram.
+ * @see BucketingSystem
  */
 public class ConcurrentHistogram<T> implements MutableHistogram<T> {
   private final AtomicLongArray bucketCounts;

@@ -10,6 +10,8 @@ import com.google.common.collect.ImmutableList;
  * An immutable representation of a Histogram.
  *
  * @param <T> The type of value counted by this Histogram.
+ *
+ * @see BucketingSystem
  */
 @AutoValue
 public abstract class ImmutableHistogram<T> implements Histogram<T> {

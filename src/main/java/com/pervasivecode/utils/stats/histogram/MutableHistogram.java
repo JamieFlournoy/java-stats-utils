@@ -9,10 +9,10 @@ package com.pervasivecode.utils.stats.histogram;
 public interface MutableHistogram<T> extends Histogram<T> {
 
   /**
-   * Count the specified value, by assigning it to a bucket and incrementing the stored count of
+   * Count the specified value by assigning it to a bucket and incrementing the stored count of
    * values that belong to that bucket.
    *
-   * @param value The value to count. This may not be null.
+   * @param value The value to count. This must not be null.
    */
   public void countValue(T value);
 }

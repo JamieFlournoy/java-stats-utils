@@ -135,6 +135,8 @@ javadoc {
         // documented in the Javadocs rooted at the specified URL.)
         linksOffline "https://docs.oracle.com/javase/10/docs/api/", 'gradle/javadocs/jdk/10'
         linksOffline "https://google.github.io/guava/releases/27.0-jre/api/docs/", 'gradle/javadocs/guava/27.0-jre'
+        linksOffline "https://www.javadoc.io/doc/javax.measure/unit-api/1.0/", 'gradle/javadocs/unit-api/1.0'
+        linksOffline "https://www.javadoc.io/doc/com.pervasivecode/measurement-utils-jsr363/0.9/", 'gradle/javadocs/measurement-utils-jsr363/0.9'
     }
 }
 
@@ -201,9 +203,9 @@ publishing {
                     }
 
                     scm {
-                url = 'https://github.com/JamieFlournoy/java-stats-utils'
+                        url = 'https://github.com/JamieFlournoy/java-stats-utils'
                         connection = 'scm:git:git://github.com/JamieFlournoy/java-stats-utils.git'
-                developerConnection = 'scm:git:git@github.com:JamieFlournoy/java-stats-utils.git'
+                        developerConnection = 'scm:git:git@github.com:JamieFlournoy/java-stats-utils.git'
                     }
                 }
 
