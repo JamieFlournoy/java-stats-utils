@@ -1,0 +1,23 @@
+Split the  library into  two modules:  a plain  JAR and  an additional  JAR that
+depends on the plain jar, java-measure-utils, and JSR-363 things.
+
+Tweaks to ConsoleHistogramFormatter:
+
+- Change the bucketLabels in the histogram to not look cumulative (<=2, <=4
+  implies that the second one includes the count in the first one). Make this
+  clearer look the default, and make the narrower current look be available as
+  an option.
+
+- Add an optional empty-bucket trimming from output (no need to see smallest
+  buckets w/ 0 count nor largest buckets w/ 0 count).
+
+- Replace maxWidth's current meaning, which is a maxmimum number of stars in the
+  histogram, with a meaning of total histogram width including labels and
+  formatted counts.
+
+- Change to a builder-style constructor (keep the class immutable, but return a
+  new instance with the modified configuration).
+
+- Add an example program showing how callers can autodetect the terminal width
+in ConsoleHistogram*Formatter. (See
+https://stackoverflow.com/questions/1286461/can-i-find-the-console-width-with-java)

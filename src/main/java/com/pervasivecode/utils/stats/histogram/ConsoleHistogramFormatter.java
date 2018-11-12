@@ -69,8 +69,6 @@ public class ConsoleHistogramFormatter<T> {
 
     StringBuilder sb = new StringBuilder();
 
-    // TODO add optional empty-bucket trimming from output (no need to see smallest buckets w/ 0
-    // count nor largest buckets w/ 0 count)
     for (int i = 0; i <= lastBucket; i++) {
       final long bucketValue = counts[i];
       final String bucketLabel = bucketLabels[i];
