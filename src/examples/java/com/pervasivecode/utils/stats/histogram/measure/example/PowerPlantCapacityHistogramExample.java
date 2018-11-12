@@ -36,8 +36,8 @@ public class PowerPlantCapacityHistogramExample implements ExampleApplication {
     List<String> lines = Resources.readLines(csvFileUrl, UTF_8);
     lines.remove(0); // Drop the first line since it's a header row.
 
-    // TODO get SI units from the javax.measure.spi.ServiceProvider instead of directly depending on
-    // a specific implementation.
+    // We can't get Watts from the javax.measure.spi.ServiceProvider API (si.uom.SI seems not to
+    // work correctly in v0.9) so we'll just use the implementation class directly.
     Unit<Power> baseUnit = Units.WATT;
     Unit<Power> inputFileUnit = MetricPrefix.MEGA(Units.WATT);
     QuantityFactory<Power> quantityFactory =

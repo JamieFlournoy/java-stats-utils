@@ -1,16 +1,37 @@
 package com.pervasivecode.utils.stats.histogram.measure;
 
-import static java.math.RoundingMode.CEILING;
-import static java.math.RoundingMode.HALF_EVEN;
-import java.math.BigDecimal;
+import static com.pervasivecode.utils.stats.histogram.BucketSelectors.linearLongValues;
+import static com.pervasivecode.utils.stats.histogram.BucketSelectors.powerOf2LongValues;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.spi.QuantityFactory;
 import com.google.common.base.Converter;
 import com.pervasivecode.utils.stats.histogram.BucketSelector;
-import com.pervasivecode.utils.stats.histogram.ConverterBasedBucketSelector;
+import com.pervasivecode.utils.stats.histogram.BucketSelectors;
 
 public class QuantityBucketSelectors {
+  /**
+   * Get a BucketSelector that has upper bound values that are {@code Quantity<T>} instances whose
+   * numeric component is part of an exponential series made up of consecutive whole-number powers
+   * of 2.
+   * <p>
+   * Example: upper bound values 4 Sv, 8 Sv, 16 Sv, 32 Sv.
+   *
+   * @param minPower The smallest power of 2 to use when generating upper bound values.
+   * @param baseUnit The base "ones" unit of measurement type T in the desired system of units.
+   *        Example: kilogram, meter, square foot.
+   * @param quantityFactory An object that can instantiate objects of type {@code Quantity<T>}.
+   * @param numBuckets The number of buckets.
+   * @return A {@code BucketSelector<Long>} instance.
+   */
+  public static <T extends Quantity<T>> BucketSelector<Quantity<T>> powerOf2(int minPower,
+      Unit<T> baseUnit, QuantityFactory<T> quantityFactory, final int numBuckets) {
+    Converter<Quantity<T>, Long> valueTransformer =
+        QuantityConverters.quantityToLongTransformer(baseUnit, quantityFactory);
+    BucketSelector<Long> unitlessBucketer = powerOf2LongValues(minPower, numBuckets);
+    return BucketSelectors.transform(unitlessBucketer, valueTransformer);
+  }
+
   /**
    * Get a BucketSelector that has upper bound values that are {@code Quantity<T>} instances whose
    * numeric component is part of an exponential series.
@@ -30,29 +51,36 @@ public class QuantityBucketSelectors {
    */
   public static <T extends Quantity<T>> BucketSelector<Quantity<T>> exponential(double base,
       Unit<T> baseUnit, QuantityFactory<T> quantityFactory, double minPower, int numBuckets) {
-    Converter<Quantity<T>, Integer> converter = new Converter<>() {
-      @Override
-      protected Integer doForward(Quantity<T> value) {
-        double valueAsDoubleInBaseUnits = value.to(baseUnit).getValue().doubleValue();
-        double logOfValue = Math.log(valueAsDoubleInBaseUnits);
-        double logOfBase = Math.log(base);
+    Converter<Quantity<T>, Double> transformer =
+        QuantityConverters.quantityToDoubleTransformer(baseUnit, quantityFactory);
+    BucketSelector<Double> unitlessBucketer =
+        BucketSelectors.exponential(base, minPower, numBuckets);
+    return BucketSelectors.transform(unitlessBucketer, transformer);
+  }
 
-        // Use BigDecimal and round carefully, to work around Double precision limitations.
-        // Example: Math.log(125)/Math.log(5) => 3.0000000000000004 (should be exactly 3).
-        BigDecimal indexAsBig = BigDecimal.valueOf(logOfValue) //
-            .divide(BigDecimal.valueOf(logOfBase), 12, HALF_EVEN) //
-            .subtract(BigDecimal.valueOf(minPower));
 
-        int indexIgnoringNumBuckets = indexAsBig.setScale(0, CEILING).intValue();
-        return Math.min(indexIgnoringNumBuckets, numBuckets - 1);
-      }
+  /**
+   * Get a BucketSelector that has upper bound values that are evenly distributed between a smallest
+   * and largest value.
+   * <p>
+   * Example: 0 kg, 5 kg, 10 kg, 15 kg, 20 kg.
+   *
+   * @param lowestUpperBound The upper-bound value for the first bucket (index 0).
+   * @param highestUpperBound The upper-bound value for the next-to-last bucket
+   *        ({@code index (numBuckets - 2)}).
+   * @param numBuckets The total number of buckets.
+   * @return A {@code BucketSelector<Long>} instance.
+   */
+  public static <T extends Quantity<T>> BucketSelector<Quantity<T>> linear(Unit<T> baseUnit,
+      QuantityFactory<T> quantityFactory, Quantity<T> lowestUpperBound,
+      Quantity<T> highestUpperBound, int numBuckets) {
+    Converter<Quantity<T>, Long> transformer = QuantityConverters.quantityToLongTransformer(baseUnit, quantityFactory);
 
-      @Override
-      protected Quantity<T> doBackward(Integer index) {
-        return quantityFactory.create(Math.pow(base, minPower + index), baseUnit);
-      }
-    };
+    long lowestUpperBoundQty = transformer.convert(lowestUpperBound);
+    long highestUpperBoundQty = transformer.convert(highestUpperBound);
+    BucketSelector<Long> unitlessBucketer =
+        linearLongValues(lowestUpperBoundQty, highestUpperBoundQty, numBuckets);
 
-    return new ConverterBasedBucketSelector<>(converter, numBuckets);
+    return BucketSelectors.transform(unitlessBucketer, transformer);
   }
 }

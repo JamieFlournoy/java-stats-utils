@@ -34,5 +34,4 @@ public class ConverterBasedBucketSelector<T> implements BucketSelector<T> {
     checkNotNull(value, "Can't bucket a null value.");
     return converter.convert(value);
   }
-
 }
