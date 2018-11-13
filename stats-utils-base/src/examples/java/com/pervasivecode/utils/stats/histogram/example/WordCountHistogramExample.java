@@ -16,6 +16,10 @@ import com.pervasivecode.utils.stats.histogram.ConsoleHistogramFormatter;
 import com.pervasivecode.utils.stats.histogram.MutableHistogram;
 import com.pervasivecode.utils.stats.histogram.example.ExampleApplication;
 
+/**
+ * Demonstration of how to create, populate, and format the contents of a {@link Histogram}
+ * counting word lengths for each of the words in a text document.
+ */
 public class WordCountHistogramExample implements ExampleApplication {
   private static final String ULYSSES_RESOURCE_PATH =
       "com/pervasivecode/utils/stats/histogram/examples/ulysses_by_alfred_tennyson.txt";

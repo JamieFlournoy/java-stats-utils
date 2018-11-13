@@ -1,16 +1,6 @@
 # Code Overview
 
-This Gradle project contains two subprojects, each of which generates a library published as a separate Maven artifact:
-
-`com.pervasivecode:stats-utils:0.9`
-
-and
-
-`com.pervasivecode:stats-utils-measure-jsr363:0.9`
-
-They are separate because the second library is somewhat specialized in that it provides additional classes compatible with the JSR 363 Units of Measurement API and has additional dependencies on related libraries. If you don't want to use those classes, then you don't need to depend on the `stats-utils-measure-jsr363` library from your project.
-
-This overview lists all of the public interfaces and implementation classes from both libraries, but the ones that are only available in `stats-utils-measure-jsr363` are marked as such on an item by item basis.
+This overview lists all of the public interfaces and implementation classes from both `com.pervasivecode:stats-utils:0.9` and `com.pervasivecode:stats-utils-measure-jsr363:0.9`, but the ones that are only available in `stats-utils-measure-jsr363` are marked as such on an item by item basis.
 
 ### Javadoc links:
 
@@ -91,4 +81,15 @@ This is an adapter to present a histogram of plain numeric types as a histogram 
 #### [QuantityBucketSelectors](stats-utils-measure-jsr363/src/main/java/com/pervasivecode/utils/stats/histogram/measure/QuantityBucketSelectors.java) _(only in stats-utils-measure-jsr363)_
 
 `BucketSelector` factory methods for basic bucketing strategies, working with values that are instances of `Quantity<T>`.
+
+
+## Example Code
+
+### [WordCountHistogramExample](stats-utils-base/src/examples/java/com/pervasivecode/utils/stats/histogram/example/WordCountHistogramExample.java)
+
+Demonstration of how to create, populate, and format the contents of a `Histogram` counting word lengths for each of the words in a text document.
+
+### [PowerPlantCapacityHistogramExample](stats-utils-measure-jsr363/src/examples/java/com/pervasivecode/utils/stats/histogram/measure/example/PowerPlantCapacityHistogramExample.java)
+
+Demonstration of how to create, populate, and format the contents of a `Histogram` counting `Quantity<Power>` values representing the electricity generation capacities of over 28,000 known power plants worldwide.
 

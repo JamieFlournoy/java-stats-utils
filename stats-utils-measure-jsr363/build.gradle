@@ -51,7 +51,7 @@ publishing {
 
                 pom {
                     name = 'Java Statistics Utilities for JSR 363'
-                    description = 'Classes for building histograms whose values are JSR 363 Units of Measurement quantities.'
+                    description = 'Classes for building and formatting histograms whose values are JSR 363 Units of Measurement quantities.'
                 }
 
             }
