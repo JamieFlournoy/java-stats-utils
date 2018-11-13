@@ -6,10 +6,10 @@ import com.pervasivecode.utils.stats.histogram.ConsoleHistogramFormatter;
 import com.pervasivecode.utils.stats.histogram.Histogram;
 
 /**
- * Format {@link Histogram} contents for a text display. The formatted output consists of a vertical
- * list of labeled histogram buckets, with horizontal bar graphs showing the count in each bucket,
- * followed by a percentage that represents the number of items counted in this bucket as a fraction
- * of all items counted by this histogram.
+ * Format {@link Histogram}{@code <}{@link Quantity}{@code >} contents for a text display. The
+ * formatted output consists of a vertical list of labeled histogram buckets, with horizontal bar
+ * graphs showing the count in each bucket, followed by a percentage that represents the number of
+ * items counted in this bucket as a fraction of all items counted by this histogram.
  * <p>
  * This version of {@link ConsoleHistogramFormatter} handles JSR-363 {@link Quantity} objects, which
  * represent values of a certain measurement (e.g. {@link javax.measure.quantity.Mass Mass},
