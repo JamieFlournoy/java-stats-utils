@@ -41,7 +41,7 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
 
   /**
    * Obtain a builder that allows construction of a new instance.
-   * 
+   *
    * @param <V> The type of value counted by this Histogram.
    * @return A new, empty Builder instance.
    */
@@ -49,6 +49,10 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
     return new AutoValue_ImmutableHistogram.Builder<>();
   }
 
+  /**
+   * An object that can be used to create an {@link ImmutableHistogram}.
+   * @param <T> The type of value counted by the ImmutableHistogram that this Builder will make.
+   */
   @AutoValue.Builder
   public abstract static class Builder<T> {
     /**
