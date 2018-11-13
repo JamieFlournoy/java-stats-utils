@@ -17,7 +17,6 @@ import com.pervasivecode.utils.measure.api.QuantityFormatter;
 import com.pervasivecode.utils.measure.api.QuantityPrefixSelector;
 import com.pervasivecode.utils.measure.impl.ScalingFormatter;
 import com.pervasivecode.utils.measure.impl.SiPrefixSelector;
-import com.pervasivecode.utils.stats.examples.ExampleApplication;
 import com.pervasivecode.utils.stats.histogram.BucketSelector;
 import com.pervasivecode.utils.stats.histogram.ConcurrentHistogram;
 import com.pervasivecode.utils.stats.histogram.measure.ConsoleHistogramQuantityFormatter;

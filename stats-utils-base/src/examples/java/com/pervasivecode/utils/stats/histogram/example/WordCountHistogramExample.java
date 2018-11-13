@@ -9,12 +9,12 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import com.google.common.base.Splitter;
 import com.google.common.io.Resources;
-import com.pervasivecode.utils.stats.examples.ExampleApplication;
 import com.pervasivecode.utils.stats.histogram.BucketSelector;
 import com.pervasivecode.utils.stats.histogram.BucketSelectors;
 import com.pervasivecode.utils.stats.histogram.ConcurrentHistogram;
 import com.pervasivecode.utils.stats.histogram.ConsoleHistogramFormatter;
 import com.pervasivecode.utils.stats.histogram.MutableHistogram;
+import com.pervasivecode.utils.stats.histogram.example.ExampleApplication;
 
 public class WordCountHistogramExample implements ExampleApplication {
   private static final String ULYSSES_RESOURCE_PATH =

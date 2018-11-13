@@ -89,9 +89,6 @@ subprojects {
     cucumber {
         maxParallelForks = 4
     }
-    cucumberTest {
-        stepDefinitionRoots = ['com.pervasivecode.utils.stats.test.cucumber.steps']
-    }
     dependencies {
         cucumberTestImplementation 'io.cucumber:cucumber-java8:4.2.0'
         cucumberTestImplementation 'junit:junit:4.12'

@@ -1,12 +1,12 @@
-package com.pervasivecode.utils.stats.test.cucumber.steps;
+package com.pervasivecode.utils.stats.testing.cucumber;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.truth.Truth.assertThat;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import com.pervasivecode.utils.stats.examples.ExampleApplication;
 import com.pervasivecode.utils.stats.histogram.example.WordCountHistogramExample;
+import com.pervasivecode.utils.stats.histogram.measure.example.ExampleApplication;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

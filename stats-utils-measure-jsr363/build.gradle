@@ -1,3 +1,7 @@
+cucumberTest {
+    stepDefinitionRoots = ['com.pervasivecode.utils.stats.measure.testing.cucumber']
+}
+
 dependencies {
     api project(':stats-utils-base')
 

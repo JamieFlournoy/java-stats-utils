@@ -1,4 +1,6 @@
-
+cucumberTest {
+    stepDefinitionRoots = ['com.pervasivecode.utils.stats.testing.cucumber']
+}
 
 publishing {
     publications {
