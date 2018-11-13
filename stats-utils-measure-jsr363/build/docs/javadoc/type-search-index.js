@@ -1,1 +1,0 @@
-typeSearchIndex = [{"p":"com.pervasivecode.utils.stats.histogram.measure","l":"ConsoleHistogramQuantityFormatter"},{"p":"com.pervasivecode.utils.stats.histogram.measure","l":"ImmutableQuantityHistogram"},{"p":"com.pervasivecode.utils.stats.histogram.measure","l":"QuantityBucketSelectors"}]

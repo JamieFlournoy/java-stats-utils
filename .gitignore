@@ -2,5 +2,7 @@
 /.gradle/
 /bin/
 /build/
-/stats-utils-*/bin/
-/stats-utils-*/build/
+/stats-utils-base/bin/
+/stats-utils-base/build/
+/stats-utils-measure-jsr363/bin/
+/stats-utils-measure-jsr363/build/
