@@ -28,8 +28,9 @@ javadoc {
         // Javadocs to a local subdir. (The package-list file contains
         // a list of Java package names of classes which are
         // documented in the Javadocs rooted at the specified URL.)
-        linksOffline "https://www.javadoc.io/doc/javax.measure/unit-api/1.0/", '../gradle/javadocs/unit-api/1.0'
-        linksOffline "https://www.javadoc.io/doc/com.pervasivecode/measurement-utils-jsr363/0.9/", '../gradle/javadocs/measurement-utils-jsr363/0.9'
+        linksOffline "https://www.javadoc.io/page/javax.measure/unit-api/1.0/", '../gradle/javadocs/unit-api/1.0'
+        linksOffline "https://www.javadoc.io/page/com.pervasivecode/measurement-utils-jsr363/0.9/", '../gradle/javadocs/measurement-utils-jsr363/0.9'
+        linksOffline "https://www.javadoc.io/page/com.pervasivecode/stats-utils/0.9/", '../gradle/javadocs/stats-utils/0.9'
     }
 }
 
@@ -46,7 +47,7 @@ publishing {
                 // response. Likewise, publishing assets to a release
                 // staging repository will only work if this version
                 // does _not_ end in "-SNAPSHOT".
-                version = '0.9-SNAPSHOT'
+                version = '0.9'
 
                 pom {
                     name = 'Java Statistics Utilities for JSR 363'
