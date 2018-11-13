@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.pervasivecode.utils.stats.histogram.IrregularSetBucketSelectorTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2018-11-13T03:43:25" hostname="Jamies-MacBook-Pro.local" time="0.013">
+  <properties/>
+  <testcase name="maxValueForBucket_withSingleMaxValueSet_shouldReturnThatValueOrNull" classname="com.pervasivecode.utils.stats.histogram.IrregularSetBucketSelectorTest" time="0.01"/>
+  <testcase name="maxValueForBucket_withMultipleMaxValueSet_shouldReturnCorrectMaxValue" classname="com.pervasivecode.utils.stats.histogram.IrregularSetBucketSelectorTest" time="0.0"/>
+  <testcase name="bucketIndexFor_withMultipleMaxValueSet_shouldReturnCorrectBucket" classname="com.pervasivecode.utils.stats.histogram.IrregularSetBucketSelectorTest" time="0.0"/>
+  <testcase name="numBuckets_withTwoUpperBounds_shouldReturnThree" classname="com.pervasivecode.utils.stats.histogram.IrregularSetBucketSelectorTest" time="0.001"/>
+  <testcase name="constructor_withEmptyMaxValueSet_shouldWork" classname="com.pervasivecode.utils.stats.histogram.IrregularSetBucketSelectorTest" time="0.001"/>
+  <testcase name="bucketIndexFor_withSingleMaxValueSet_shouldReturnZeroOrOne" classname="com.pervasivecode.utils.stats.histogram.IrregularSetBucketSelectorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

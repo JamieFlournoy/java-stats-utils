@@ -1,0 +1,25 @@
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            afterEvaluate {
+                artifactId = 'stats-utils'
+
+                // This must end in "-SNAPSHOT" for publishing assets
+                // to a "snapshot" Maven repository to work, or else
+                // the Gradle task will fail with a 400 Bad Request
+                // response. Likewise, publishing assets to a release
+                // staging repository will only work if this version
+                // does _not_ end in "-SNAPSHOT".
+                version = '0.9-SNAPSHOT'
+
+                pom {
+                    name = 'Java Statistics Utilities'
+                    description = 'Classes for building histograms and estimating task completion.'
+                }
+
+            }
+        }
+    }
+}

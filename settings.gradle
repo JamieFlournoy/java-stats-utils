@@ -1,3 +1,5 @@
 enableFeaturePreview('STABLE_PUBLISHING')
 
 rootProject.name = 'java-stats-utils'
+include 'stats-utils-base'
+include 'stats-utils-measure-jsr363'

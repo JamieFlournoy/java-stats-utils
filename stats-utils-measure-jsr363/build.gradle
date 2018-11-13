@@ -1,0 +1,55 @@
+dependencies {
+    api project(':stats-utils-base')
+
+
+    // Dependencies that are needed at runtime and compile-time, and
+    // that are also exposed as part of the public API:
+    api group: 'systems.uom', name: 'systems-common-java8', version: '0.9'
+    api group: 'systems.uom', name: 'systems-unicode-java8', version: '0.9'
+    api group: 'systems.uom', name: 'systems-quantity', version: '0.9'
+    // TODO: verify that all of these are actually visible in the
+    // API, vs. being able to be delcared here as 'implementation' rather than 'api'.
+
+    // TODO: update these ^ with more recent versions. Also look at
+    // JSR 385 which is newer; see
+    // https://github.com/unitsofmeasurement/indriya
+
+    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.1-SNAPSHOT'
+}
+
+javadoc {
+    options {
+        // Generate Javadocs links even when offline, using the
+        // element-list or package-list file copied from the public
+        // Javadocs to a local subdir. (The package-list file contains
+        // a list of Java package names of classes which are
+        // documented in the Javadocs rooted at the specified URL.)
+        linksOffline "https://www.javadoc.io/doc/javax.measure/unit-api/1.0/", '../gradle/javadocs/unit-api/1.0'
+        linksOffline "https://www.javadoc.io/doc/com.pervasivecode/measurement-utils-jsr363/0.9/", '../gradle/javadocs/measurement-utils-jsr363/0.9'
+    }
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            afterEvaluate {
+                artifactId = 'stats-utils-measure-jsr363'
+
+                // This must end in "-SNAPSHOT" for publishing assets
+                // to a "snapshot" Maven repository to work, or else
+                // the Gradle task will fail with a 400 Bad Request
+                // response. Likewise, publishing assets to a release
+                // staging repository will only work if this version
+                // does _not_ end in "-SNAPSHOT".
+                version = '0.9-SNAPSHOT'
+
+                pom {
+                    name = 'Java Statistics Utilities for JSR 363'
+                    description = 'Classes for building histograms whose values are JSR 363 Units of Measurement quantities.'
+                }
+
+            }
+        }
+    }
+}

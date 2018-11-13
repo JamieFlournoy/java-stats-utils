@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.pervasivecode.utils.stats.histogram.measure.ImmutableQuantityHistogramTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2018-11-13T03:36:08" hostname="Jamies-MacBook-Pro.local" time="0.003">
+  <properties/>
+  <testcase name="of_withValidArgs_shouldProduceWorking" classname="com.pervasivecode.utils.stats.histogram.measure.ImmutableQuantityHistogramTest" time="0.002"/>
+  <testcase name="of_shouldRequireHistogramParam" classname="com.pervasivecode.utils.stats.histogram.measure.ImmutableQuantityHistogramTest" time="0.0"/>
+  <testcase name="of_shouldRequireQuantityFactoryParam" classname="com.pervasivecode.utils.stats.histogram.measure.ImmutableQuantityHistogramTest" time="0.0"/>
+  <testcase name="of_shouldRequireBaseUnitParam" classname="com.pervasivecode.utils.stats.histogram.measure.ImmutableQuantityHistogramTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
