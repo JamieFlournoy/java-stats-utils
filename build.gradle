@@ -22,8 +22,6 @@ plugins {
     // This plugin provides integration test tasks using the Cucumber
     // behavior-driven development tool.
     id 'com.commercehub.cucumber-jvm' version '0.14'
-
-
 }
 
 // These rules apply to all subprojects.
@@ -37,6 +35,11 @@ subprojects {
     repositories {
         jcenter()
         mavenLocal()
+
+        // Uncomment to allow a dependency on a non-release
+        // (-SNAPSHOT) version of a library from the Sonatype OSSRH
+        // snapshot repository:
+        // maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
     dependencies {
@@ -46,11 +49,6 @@ subprojects {
         // Dependencies needed at runtime and compile-time, but not
         // exposed in the API of this library:
         implementation 'com.google.guava:guava:27.0-jre'
-        implementation 'com.google.auto.value:auto-value-annotations:1.6.2'
-
-        annotationProcessor 'com.google.auto.value:auto-value:1.6.2'
-
-        implementation group: 'com.pervasivecode', name: 'java-time-utils', version: '0.9'
 
         // Dependencies needed for running tests:
         testImplementation 'junit:junit:4.12'

@@ -2,6 +2,13 @@ cucumberTest {
     stepDefinitionRoots = ['com.pervasivecode.utils.stats.testing.cucumber']
 }
 
+dependencies {
+    implementation group: 'com.google.auto.value', name: 'auto-value-annotations', version: '1.6.2'
+    implementation group: 'com.pervasivecode', name: 'time-utils', version: '0.9'
+
+    annotationProcessor group: 'com.google.auto.value', name: 'auto-value', version: '1.6.2'
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -14,7 +21,7 @@ publishing {
                 // response. Likewise, publishing assets to a release
                 // staging repository will only work if this version
                 // does _not_ end in "-SNAPSHOT".
-                version = '0.9'
+                version = '0.9.1'
 
                 pom {
                     name = 'Java Statistics Utilities'

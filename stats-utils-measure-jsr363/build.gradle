@@ -5,7 +5,6 @@ cucumberTest {
 dependencies {
     api project(':stats-utils-base')
 
-
     // Dependencies that are needed at runtime and compile-time, and
     // that are also exposed as part of the public API:
     api group: 'systems.uom', name: 'systems-common-java8', version: '0.9'
@@ -18,7 +17,7 @@ dependencies {
     // JSR 385 which is newer; see
     // https://github.com/unitsofmeasurement/indriya
 
-    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.1-SNAPSHOT'
+    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.1'
 }
 
 javadoc {
@@ -47,7 +46,7 @@ publishing {
                 // response. Likewise, publishing assets to a release
                 // staging repository will only work if this version
                 // does _not_ end in "-SNAPSHOT".
-                version = '0.9'
+                version = '0.9.1'
 
                 pom {
                     name = 'Java Statistics Utilities for JSR 363'
