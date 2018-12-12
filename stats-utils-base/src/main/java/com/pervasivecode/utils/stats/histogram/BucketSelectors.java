@@ -105,6 +105,12 @@ public class BucketSelectors {
     Converter<Double, Integer> converter = new Converter<>() {
       @Override
       protected Integer doForward(Double value) {
+        if (value <= 0) {
+          return 0;
+        }
+        if (value == Double.POSITIVE_INFINITY) {
+          return numBuckets - 1;
+        }
         double logOfValue = Math.log(value.doubleValue());
 
         // Use BigDecimal and round carefully, to work around Double precision limitations.

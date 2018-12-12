@@ -74,4 +74,37 @@ public class BucketSelectorsTest {
     assertThat(bucketer.bucketUpperBound(2)).isEqualTo(1000);
     assertThat(bucketer.bucketUpperBound(3)).isEqualTo(2000);
   }
+
+  @Test
+  public void exponential_shouldBucketCorrectly() {
+    BucketSelector<Double> bucketer = BucketSelectors.exponential(5.0, 0, 5);
+    assertThat(bucketer.bucketIndexFor(Double.NEGATIVE_INFINITY)).isEqualTo(0);
+    assertThat(bucketer.bucketIndexFor(-2000.0)).isEqualTo(0);
+    assertThat(bucketer.bucketIndexFor(0.0)).isEqualTo(0);
+    assertThat(bucketer.bucketIndexFor(0.99)).isEqualTo(0);
+    assertThat(bucketer.bucketIndexFor(1.0)).isEqualTo(0);
+
+    assertThat(bucketer.bucketIndexFor(1.1)).isEqualTo(1);
+    assertThat(bucketer.bucketIndexFor(4.9)).isEqualTo(1);
+    assertThat(bucketer.bucketIndexFor(5.0)).isEqualTo(1);
+    assertThat(bucketer.bucketIndexFor(5.1)).isEqualTo(2);
+
+    assertThat(bucketer.bucketIndexFor(24.9)).isEqualTo(2);
+    assertThat(bucketer.bucketIndexFor(25.0)).isEqualTo(2);
+    assertThat(bucketer.bucketIndexFor(25.1)).isEqualTo(3);
+
+    assertThat(bucketer.bucketIndexFor(124.9)).isEqualTo(3);
+    assertThat(bucketer.bucketIndexFor(125.0)).isEqualTo(3);
+    assertThat(bucketer.bucketIndexFor(125.1)).isEqualTo(4);
+    assertThat(bucketer.bucketIndexFor(Double.POSITIVE_INFINITY)).isEqualTo(4);
+  }
+
+  @Test
+  public void exponential_shouldReturnUpperBoundsCorrectly() {
+    BucketSelector<Double> bucketer = BucketSelectors.exponential(5.0, 0, 5);
+    assertThat(bucketer.bucketUpperBound(0)).isEqualTo(1.0);
+    assertThat(bucketer.bucketUpperBound(1)).isEqualTo(5.0);
+    assertThat(bucketer.bucketUpperBound(2)).isEqualTo(25.0);
+    assertThat(bucketer.bucketUpperBound(3)).isEqualTo(125.0);
+  }
 }
