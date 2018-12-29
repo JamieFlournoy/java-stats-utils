@@ -22,7 +22,7 @@ import com.pervasivecode.utils.stats.histogram.example.ExampleApplication;
  */
 public class WordCountHistogramExample implements ExampleApplication {
   private static final String ULYSSES_RESOURCE_PATH =
-      "com/pervasivecode/utils/stats/histogram/examples/ulysses_by_alfred_tennyson.txt";
+      "com/pervasivecode/utils/stats/histogram/example/ulysses_by_alfred_tennyson.txt";
 
   @Override
   public void runExample(PrintWriter output) throws IOException {

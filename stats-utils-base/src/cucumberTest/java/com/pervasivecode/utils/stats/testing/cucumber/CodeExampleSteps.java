@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import com.pervasivecode.utils.stats.histogram.example.WordCountHistogramExample;
-import com.pervasivecode.utils.stats.histogram.measure.example.ExampleApplication;
+import com.pervasivecode.utils.stats.histogram.example.ExampleApplication;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
