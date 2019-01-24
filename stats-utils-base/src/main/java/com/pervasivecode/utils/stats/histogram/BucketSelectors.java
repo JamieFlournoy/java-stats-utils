@@ -135,6 +135,42 @@ public class BucketSelectors {
   }
 
   /**
+   * Get a BucketSelector that has upper bound values that are {@code long} values that are part
+   * of an exponential series. Each bucket value's exponent is 1.0 plus the exponent of the previous
+   * bucket value.
+   * <p>
+   * Example: arguments {@code base=5.0}, {@code minPower=0.0}, and {@code numBuckets=5} would
+   * generate base and exponent values of 5<sup>0</sup>, 5<sup>1</sup>, 5<sup>2</sup>, and
+   * 5<sup>3</sup>, so the upper bound values would be 1, 5, 25, and 125.
+   *
+   * @param base The base that will be raised to the specified exponents to generate upper bound
+   *        values.
+   * @param minPower The smallest exponent to use when generating upper bound values.
+   * @param numBuckets The number of buckets into which values should be counted.
+   *
+   * @return A {@code BucketSelector<Long>} instance.
+   */
+  public static BucketSelector<Long> exponentialLong(double base, double minPower, int numBuckets) {
+    Converter<Long, Double> converter = new Converter<Long, Double>() {
+      @Override
+      protected Double doForward(Long a) {
+        return a.doubleValue();
+      }
+
+      @Override
+      protected Long doBackward(Double b) {
+        if (b.isInfinite()) {
+          return b > 0 ? Long.MAX_VALUE : Long.MIN_VALUE;
+        }
+        return b.longValue();
+      }
+
+    };
+    return BucketSelectors.transform(BucketSelectors.exponential(base, minPower, numBuckets),
+        converter);
+  }
+
+  /**
    * Get a BucketSelector that has upper bound values that are evenly distributed between a smallest
    * and largest value.
    * <p>
