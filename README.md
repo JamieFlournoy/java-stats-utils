@@ -6,11 +6,11 @@ This library includes classes for building and formatting histograms, and  for e
 
 This repository contains two Gradle subprojects, each of which generates a library published as a separate Maven artifact:
 
-`com.pervasivecode:stats-utils:0.9`
+`com.pervasivecode:stats-utils:0.9.2`
 
 and
 
-`com.pervasivecode:stats-utils-measure-jsr363:0.9`.
+`com.pervasivecode:stats-utils-measure-jsr363:0.9.2`.
 
 The `stats-utils-measure-jsr363` is an extension of, and therefore depends on, the `stats-utils` library.
 
