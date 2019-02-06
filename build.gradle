@@ -39,7 +39,7 @@ subprojects {
         // Uncomment to allow a dependency on a non-release
         // (-SNAPSHOT) version of a library from the Sonatype OSSRH
         // snapshot repository:
-        // maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
     dependencies {

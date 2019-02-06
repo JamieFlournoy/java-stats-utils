@@ -5,7 +5,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
-import com.pervasivecode.utils.time.api.TimeSource;
+import com.pervasivecode.utils.time.TimeSource;
 
 /**
  * This is a trivial DurationEstimator that just uses the total amount processed divided by the
