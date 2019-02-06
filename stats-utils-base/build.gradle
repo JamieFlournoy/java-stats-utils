@@ -3,10 +3,10 @@ cucumberTest {
 }
 
 dependencies {
-    implementation group: 'com.google.auto.value', name: 'auto-value-annotations', version: '1.6.2'
+    implementation group: 'com.google.auto.value', name: 'auto-value-annotations', version: '1.6.3'
     implementation group: 'com.pervasivecode', name: 'time-utils', version: '0.11-SNAPSHOT'
 
-    annotationProcessor group: 'com.google.auto.value', name: 'auto-value', version: '1.6.2'
+    annotationProcessor group: 'com.google.auto.value', name: 'auto-value', version: '1.6.3'
 }
 
 javadoc {

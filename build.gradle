@@ -17,7 +17,7 @@ plugins {
 
     // This adds ErrorProne, which warns about source code that looks
     // like it's likely to be a bug, or to lead to future bugs.
-    id "net.ltgt.errorprone" version "0.6"
+    id "net.ltgt.errorprone" version "0.6.1"
 
     // This plugin provides integration test tasks using the Cucumber
     // behavior-driven development tool.
@@ -65,10 +65,6 @@ subprojects {
         errorprone "com.google.errorprone:error_prone_core:2.3.2"
     }
 
-
-    tasks.withType(JavaCompile).configureEach {
-        options.errorprone.disableWarningsInGeneratedCode = true
-    }
 
     // Example code shouldn't be put in the library .jar, but should be compiled
     // before running unit and integration tests. So create a separate sourceSet
