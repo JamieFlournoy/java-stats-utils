@@ -60,7 +60,7 @@ public class BucketSelectors {
   public static BucketSelector<Long> powerOf2LongValues(int minPower, int numBuckets) {
     checkArgument(minPower >= 0, "minPower must be non-negative.");
 
-    Converter<Long, Integer> converter = new Converter<>() {
+    Converter<Long, Integer> converter = new Converter<Long, Integer>() {
       @Override
       protected Integer doForward(Long value) {
         long longValue = value.longValue();
@@ -102,7 +102,7 @@ public class BucketSelectors {
   public static BucketSelector<Double> exponential(double base, double minPower, int numBuckets) {
     double logOfBase = Math.log(base);
 
-    Converter<Double, Integer> converter = new Converter<>() {
+    Converter<Double, Integer> converter = new Converter<Double, Integer>() {
       @Override
       protected Integer doForward(Double value) {
         if (value <= 0) {
@@ -188,7 +188,7 @@ public class BucketSelectors {
     BigDecimal bucketWidth = BigDecimal.valueOf(highestUpperBound - lowestUpperBound)
         .divide(BigDecimal.valueOf(numBuckets - 2), RoundingMode.HALF_EVEN);
 
-    Converter<Long, Integer> converter = new Converter<>() {
+    Converter<Long, Integer> converter = new Converter<Long, Integer>() {
       @Override
       protected Integer doForward(Long value) {
         checkNotNull(value);

@@ -19,7 +19,7 @@ public class Histograms {
    */
   public static <T, V> Histogram<V> transformValues(Histogram<T> input,
       Function<T, V> transformation) {
-    return new Histogram<>() {
+    return new Histogram<V>() {
       @Override
       public int numBuckets() {
         return input.numBuckets();

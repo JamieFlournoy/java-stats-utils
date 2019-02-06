@@ -23,7 +23,7 @@ class QuantityConverters {
     checkNotNull(quantityFactory);
     checkNotNull(baseUnit);
 
-    return new Converter<>() {
+    return new Converter<Quantity<T>, Long>() {
       @Override
       protected Long doForward(Quantity<T> value) {
         return value.to(baseUnit).getValue().longValue();
@@ -49,7 +49,7 @@ class QuantityConverters {
     checkNotNull(baseUnit);
     checkNotNull(quantityFactory);
 
-    return new Converter<>() {
+    return new Converter<Quantity<T>, Double>() {
       @Override
       protected Double doForward(Quantity<T> value) {
         return value.to(baseUnit).getValue().doubleValue();

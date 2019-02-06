@@ -42,6 +42,9 @@ subprojects {
         maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
+    targetCompatibility = '1.8'
+    sourceCompatibility = '1.8'
+
     dependencies {
         // Dependencies that are needed at runtime and compile-time, and
         // that are also exposed as part of the public API:

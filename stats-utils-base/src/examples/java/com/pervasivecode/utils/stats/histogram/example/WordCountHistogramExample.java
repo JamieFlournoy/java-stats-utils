@@ -2,6 +2,7 @@ package com.pervasivecode.utils.stats.histogram.example;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicIntegerArray;
@@ -66,6 +67,7 @@ public class WordCountHistogramExample implements ExampleApplication {
   }
 
   public static void main(String[] args) throws Exception {
-    new WordCountHistogramExample().runExample(new PrintWriter(System.out, true, UTF_8));
+    OutputStreamWriter osw = new OutputStreamWriter(System.out, UTF_8);
+    new WordCountHistogramExample().runExample(new PrintWriter(osw, true));
   }
 }

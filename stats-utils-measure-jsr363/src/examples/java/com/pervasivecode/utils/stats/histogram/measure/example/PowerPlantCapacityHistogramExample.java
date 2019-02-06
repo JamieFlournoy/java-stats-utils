@@ -2,6 +2,7 @@ package com.pervasivecode.utils.stats.histogram.measure.example;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -70,6 +71,7 @@ public class PowerPlantCapacityHistogramExample implements ExampleApplication {
   }
 
   public static void main(String[] args) throws Exception {
-    new PowerPlantCapacityHistogramExample().runExample(new PrintWriter(System.out, true, UTF_8));
+    OutputStreamWriter osw = new OutputStreamWriter(System.out, UTF_8);
+    new PowerPlantCapacityHistogramExample().runExample(new PrintWriter(osw, true));
   }
 }
