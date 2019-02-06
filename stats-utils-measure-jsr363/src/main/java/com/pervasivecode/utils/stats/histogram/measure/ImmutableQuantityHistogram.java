@@ -1,8 +1,11 @@
 package com.pervasivecode.utils.stats.histogram.measure;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.spi.QuantityFactory;
+
 import com.pervasivecode.utils.stats.histogram.Histogram;
 import com.pervasivecode.utils.stats.histogram.Histograms;
 import com.pervasivecode.utils.stats.histogram.ImmutableHistogram;
@@ -29,6 +32,9 @@ public class ImmutableQuantityHistogram {
    */
   public static <N extends Number, Q extends Quantity<Q>> ImmutableHistogram<Quantity<Q>> of(
       Histogram<N> histogram, Unit<Q> baseUnit, QuantityFactory<Q> quantityFactory) {
+    requireNonNull(histogram, "The histogram argument is required.");
+    requireNonNull(baseUnit, "The baseUnit argument is required.");
+    requireNonNull(quantityFactory, "The quantityFactory argument is required.");
     return ImmutableHistogram.copyOf(
         Histograms.transformValues(histogram, (ub) -> quantityFactory.create(ub, baseUnit)));
   }

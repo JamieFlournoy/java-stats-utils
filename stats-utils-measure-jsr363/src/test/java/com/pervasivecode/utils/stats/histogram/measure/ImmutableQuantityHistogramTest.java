@@ -35,7 +35,7 @@ public class ImmutableQuantityHistogramTest {
       ImmutableQuantityHistogram.of(null, tesla, quantityFactory);
       Truth.assert_().fail("Expected null pointer exception due to null histogram argument");
     } catch (NullPointerException npe) {
-      // expected, so do nothing.
+      assertThat(npe).hasMessageThat().contains("histogram");
     }
   }
 
@@ -45,7 +45,7 @@ public class ImmutableQuantityHistogramTest {
       ImmutableQuantityHistogram.of(plainHistogram, null, quantityFactory);
       Truth.assert_().fail("Expected null pointer exception due to null baseUnit argument");
     } catch (NullPointerException npe) {
-      // expected, so do nothing.
+      assertThat(npe).hasMessageThat().contains("baseUnit");
     }
   }
 
@@ -55,7 +55,7 @@ public class ImmutableQuantityHistogramTest {
       ImmutableQuantityHistogram.of(plainHistogram, tesla, null);
       Truth.assert_().fail("Expected null pointer exception due to null quantityFactory argument");
     } catch (NullPointerException npe) {
-      // expected, so do nothing.
+      assertThat(npe).hasMessageThat().contains("quantityFactory");
     }
   }
 
