@@ -17,7 +17,7 @@ dependencies {
     // JSR 385 which is newer; see
     // https://github.com/unitsofmeasurement/indriya
 
-    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.1'
+    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.3-SNAPSHOT'
 }
 
 javadoc {

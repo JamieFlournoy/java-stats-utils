@@ -10,10 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.truth.Truth;
-import com.pervasivecode.utils.measure.impl.ScalingDurationFormatter;
+import com.pervasivecode.utils.measure.ScalingDurationFormatter;
 import com.pervasivecode.utils.stats.histogram.Histogram;
 import com.pervasivecode.utils.stats.histogram.ImmutableHistogram;
 import com.pervasivecode.utils.stats.histogram.measure.ConsoleHistogramQuantityFormatter;
+import com.pervasivecode.utils.time.DurationFormats;
+import com.pervasivecode.utils.time.DurationFormatter;
 
 public class ConsoleHistogramQuantityFormatterTest {
   private QuantityFactory<Time> quantityOfTimeFactory;
@@ -24,7 +26,9 @@ public class ConsoleHistogramQuantityFormatterTest {
   public void setUp() throws Exception {
     ServiceProvider measureServiceProvider = ServiceProvider.current();
     quantityOfTimeFactory = measureServiceProvider.getQuantityFactory(Time.class);
-    formatter = new ConsoleHistogramQuantityFormatter<>(ScalingDurationFormatter.US(), 20);
+    ScalingDurationFormatter scalingFormatter =
+        new ScalingDurationFormatter(new DurationFormatter(DurationFormats.getUsDefaultInstance()));
+    formatter = new ConsoleHistogramQuantityFormatter<>(scalingFormatter, 20);
   }
 
   private Quantity<Time> qtyOfMillis(long value) {

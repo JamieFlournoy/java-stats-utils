@@ -1,7 +1,7 @@
 package com.pervasivecode.utils.stats.histogram.measure;
 
 import javax.measure.Quantity;
-import com.pervasivecode.utils.measure.api.QuantityFormatter;
+import com.pervasivecode.utils.measure.QuantityFormatter;
 import com.pervasivecode.utils.stats.histogram.ConsoleHistogramFormatter;
 import com.pervasivecode.utils.stats.histogram.Histogram;
 
