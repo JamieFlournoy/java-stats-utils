@@ -31,6 +31,7 @@ subprojects {
     apply plugin: 'cucumber-jvm'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
+    apply plugin: 'jacoco'
 
     repositories {
         jcenter()
@@ -81,6 +82,32 @@ subprojects {
         examplesCompile.extendsFrom mainCompile
         examplesRuntime.extendsFrom mainRuntime
     }
+
+    test {
+        maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+        jacoco {
+            destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        }
+    }
+
+    jacoco {
+        toolVersion = "0.8.2"
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+        }
+
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                    fileTree(dir: it,
+                             exclude: ['**/AutoValue_*'])
+                })
+        }
+    }
+    jacocoTestReport.dependsOn 'test'
 
     addCucumberSuite 'cucumberTest'
     cucumber {
