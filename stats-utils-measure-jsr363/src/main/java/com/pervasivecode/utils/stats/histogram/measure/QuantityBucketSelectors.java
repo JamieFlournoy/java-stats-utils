@@ -18,6 +18,8 @@ import com.pervasivecode.utils.stats.histogram.BucketingSystem;
  * @see BucketSelectors
  */
 public class QuantityBucketSelectors {
+  private QuantityBucketSelectors() {}
+
   /**
    * Get a BucketSelector that has upper bound values that are {@code Quantity<T>} instances whose
    * numeric component is part of an exponential series made up of consecutive whole-number powers

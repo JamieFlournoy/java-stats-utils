@@ -15,6 +15,7 @@ import com.pervasivecode.utils.stats.histogram.ImmutableHistogram;
  * {@link Quantity}.
  */
 public class ImmutableQuantityHistogram {
+  private ImmutableQuantityHistogram() {}
 
   /**
    * Make a copy of a histogram, transforming its upper bound values into instances of

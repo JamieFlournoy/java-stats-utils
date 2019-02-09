@@ -10,6 +10,8 @@ import com.google.common.base.Converter;
  * Factory methods for Converters needed by {@link QuantityBucketSelectors}.
  */
 class QuantityConverters {
+  private QuantityConverters() {}
+
   /**
    * Convert {@link Quantity}{@code <T>} values into Long values, and Long values into
    * {@link Quantity}{@code <T>} values.
