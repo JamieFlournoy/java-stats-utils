@@ -130,6 +130,12 @@ subprojects {
 
     // Don't run Cucumber integration tests unless JUnit unit tests pass.
     cucumberTest.dependsOn 'test'
+    // Don't build cucumber test code unless examples code builds.
+    cucumberTestClasses.dependsOn 'examplesClasses'
+    // Don't run Cucumber integration tests unless JUnit unit tests pass.
+    cucumberTest.dependsOn 'test'
+
+    check.dependsOn 'cucumberTest'
 
     // Generate Javadoc documentation files from Java source code.
     javadoc {
