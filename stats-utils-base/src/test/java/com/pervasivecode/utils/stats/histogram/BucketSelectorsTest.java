@@ -2,13 +2,27 @@ package com.pervasivecode.utils.stats.histogram;
 
 import static com.google.common.truth.Truth.assertThat;
 import org.junit.Test;
+import com.google.common.truth.Truth;
 import com.pervasivecode.utils.stats.histogram.BucketSelector;
 import com.pervasivecode.utils.stats.histogram.BucketSelectors;
 
 public class BucketSelectorsTest {
   @Test
-  public void powerOf2_shouldBucketCorrectly() {
+  public void powerOf2LongValues_withNegativeMinPower_shouldThrow() {
+    try {
+      BucketSelectors.powerOf2LongValues(-1, 10);
+      Truth.assert_().fail("Expected an exception due to the negative minPower argument.");
+    } catch (IllegalArgumentException iae) {
+      assertThat(iae).hasMessageThat().contains("minPower");
+      assertThat(iae).hasMessageThat().contains("negative");
+    }
+  }
+
+  @Test
+  public void powerOf2LongValues_shouldBucketCorrectly() {
     BucketSelector<Long> bucketer = BucketSelectors.powerOf2LongValues(0, 10);
+    assertThat(bucketer.numBuckets()).isEqualTo(10);
+
     assertThat(bucketer.bucketIndexFor(0L)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(1L)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(2L)).isEqualTo(1);
@@ -30,8 +44,10 @@ public class BucketSelectorsTest {
   }
 
   @Test
-  public void powerOf2_shouldReturnUpperBoundsCorrectly() {
+  public void powerOf2LongValues_shouldReturnUpperBoundsCorrectly() {
     BucketSelector<Long> bucketer = BucketSelectors.powerOf2LongValues(0, 10);
+    assertThat(bucketer.numBuckets()).isEqualTo(10);
+
     assertThat(bucketer.bucketUpperBound(0)).isEqualTo(1L);
     assertThat(bucketer.bucketUpperBound(1)).isEqualTo(2L);
     assertThat(bucketer.bucketUpperBound(2)).isEqualTo(4L);
@@ -44,8 +60,9 @@ public class BucketSelectorsTest {
 
 
   @Test
-  public void linear_shouldBucketCorrectly() {
+  public void linearLongValues_shouldBucketCorrectly() {
     BucketSelector<Long> bucketer = BucketSelectors.linearLongValues(-1000, 2000, 5);
+    assertThat(bucketer.numBuckets()).isEqualTo(5);
 
     assertThat(bucketer.bucketIndexFor(-2000L)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(-1000L)).isEqualTo(0);
@@ -67,7 +84,7 @@ public class BucketSelectorsTest {
   }
 
   @Test
-  public void linear_shouldReturnUpperBoundsCorrectly() {
+  public void linearLongValues_shouldReturnUpperBoundsCorrectly() {
     BucketSelector<Long> bucketer = BucketSelectors.linearLongValues(-1000, 2000, 5);
     assertThat(bucketer.bucketUpperBound(0)).isEqualTo(-1000);
     assertThat(bucketer.bucketUpperBound(1)).isEqualTo(0);
@@ -76,8 +93,21 @@ public class BucketSelectorsTest {
   }
 
   @Test
-  public void exponentialLong_shouldBucketCorrectly() {
-    BucketSelector<Long> bucketer = BucketSelectors.exponentialLong(3.0, 0, 5);
+  public void exponentialLong_witrhNegativeBase_shouldThrow() {
+    try {
+      BucketSelectors.exponentialLong(-1.0, 1.0, 10);
+      Truth.assert_().fail("Expected an exception due to the negative base argument.");
+    } catch (IllegalArgumentException iae) {
+      assertThat(iae).hasMessageThat().contains("base");
+      assertThat(iae).hasMessageThat().contains("negative");
+    }
+  }
+
+  @Test
+  public void exponentialLong_witrhPositiveBase_shouldBucketCorrectly() {
+    BucketSelector<Long> bucketer = BucketSelectors.exponentialLong(3.0, 0.0, 5);
+    assertThat(bucketer.numBuckets()).isEqualTo(5);
+
     assertThat(bucketer.bucketIndexFor(Long.MIN_VALUE)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(-2000L)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(0L)).isEqualTo(0);
@@ -99,7 +129,9 @@ public class BucketSelectorsTest {
 
   @Test
   public void exponentialLong_shouldReturnUpperBoundsCorrectly() {
-    BucketSelector<Long> bucketer = BucketSelectors.exponentialLong(3.0, 0, 5);
+    BucketSelector<Long> bucketer = BucketSelectors.exponentialLong(3.0, 0.0, 5);
+    assertThat(bucketer.numBuckets()).isEqualTo(5);
+
     assertThat(bucketer.bucketUpperBound(0)).isEqualTo(1);
     assertThat(bucketer.bucketUpperBound(1)).isEqualTo(3);
     assertThat(bucketer.bucketUpperBound(2)).isEqualTo(9);
@@ -107,8 +139,21 @@ public class BucketSelectorsTest {
   }
 
   @Test
-  public void exponential_shouldBucketCorrectly() {
-    BucketSelector<Double> bucketer = BucketSelectors.exponential(5.0, 0, 5);
+  public void exponential_withNegativeBase_shouldThrow() {
+    try {
+      BucketSelectors.exponential(-1.0, 1.0, 10);
+      Truth.assert_().fail("Expected an exception due to the negative base argument.");
+    } catch (IllegalArgumentException iae) {
+      assertThat(iae).hasMessageThat().contains("base");
+      assertThat(iae).hasMessageThat().contains("negative");
+    }
+  }
+
+  @Test
+  public void exponential_withPositiveBase_shouldBucketCorrectly() {
+    BucketSelector<Double> bucketer = BucketSelectors.exponential(5.0, 0.0, 5);
+    assertThat(bucketer.numBuckets()).isEqualTo(5);
+
     assertThat(bucketer.bucketIndexFor(Double.NEGATIVE_INFINITY)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(-2000.0)).isEqualTo(0);
     assertThat(bucketer.bucketIndexFor(0.0)).isEqualTo(0);
@@ -133,6 +178,8 @@ public class BucketSelectorsTest {
   @Test
   public void exponential_shouldReturnUpperBoundsCorrectly() {
     BucketSelector<Double> bucketer = BucketSelectors.exponential(5.0, 0, 5);
+    assertThat(bucketer.numBuckets()).isEqualTo(5);
+
     assertThat(bucketer.bucketUpperBound(0)).isEqualTo(1.0);
     assertThat(bucketer.bucketUpperBound(1)).isEqualTo(5.0);
     assertThat(bucketer.bucketUpperBound(2)).isEqualTo(25.0);

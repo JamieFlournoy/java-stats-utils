@@ -42,7 +42,7 @@ public class QuantityBucketSelectors {
     Converter<Quantity<T>, Long> valueTransformer =
         QuantityConverters.quantityToLongTransformer(baseUnit, quantityFactory);
     BucketSelector<Long> unitlessBucketer = powerOf2LongValues(minPower, numBuckets);
-    return BucketSelectors.transform(unitlessBucketer, valueTransformer);
+    return transform(unitlessBucketer, valueTransformer);
   }
 
   /**
@@ -74,7 +74,7 @@ public class QuantityBucketSelectors {
         QuantityConverters.quantityToDoubleTransformer(baseUnit, quantityFactory);
     BucketSelector<Double> unitlessBucketer =
         BucketSelectors.exponential(base, minPower, numBuckets);
-    return BucketSelectors.transform(unitlessBucketer, transformer);
+    return transform(unitlessBucketer, transformer);
   }
 
 
@@ -108,6 +108,11 @@ public class QuantityBucketSelectors {
     BucketSelector<Long> unitlessBucketer =
         linearLongValues(lowestUpperBoundQty, highestUpperBoundQty, numBuckets);
 
-    return BucketSelectors.transform(unitlessBucketer, transformer);
+    return transform(unitlessBucketer, transformer);
+  }
+
+  private static <T, V> BucketSelector<V> transform(BucketSelector<T> input,
+      Converter<V, T> convertToWrappedType) {
+    return BucketSelectors.transform(input, convertToWrappedType, convertToWrappedType.reverse());
   }
 }
