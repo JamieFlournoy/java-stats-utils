@@ -4,7 +4,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -13,7 +15,8 @@ import com.google.common.io.Resources;
 import com.pervasivecode.utils.stats.histogram.BucketSelector;
 import com.pervasivecode.utils.stats.histogram.BucketSelectors;
 import com.pervasivecode.utils.stats.histogram.ConcurrentHistogram;
-import com.pervasivecode.utils.stats.histogram.ConsoleHistogramFormatter;
+import com.pervasivecode.utils.stats.histogram.HistogramFormat;
+import com.pervasivecode.utils.stats.histogram.HistogramFormatter;
 import com.pervasivecode.utils.stats.histogram.MutableHistogram;
 import com.pervasivecode.utils.stats.histogram.example.ExampleApplication;
 
@@ -59,8 +62,14 @@ public class WordCountHistogramExample implements ExampleApplication {
     output.println(numWords);
     output.println();
 
-    ConsoleHistogramFormatter<Long> histoFormatter =
-        new ConsoleHistogramFormatter<Long>((v) -> v.toString(), 60);
+    NumberFormat usNumberFormat = NumberFormat.getInstance(Locale.US);
+    HistogramFormatter<Long> histoFormatter = new HistogramFormatter<Long>( //
+        HistogramFormat.<Long>builder() //
+            .setUpperBoundValueFormatter((v) -> usNumberFormat.format(v)) //
+            .setLabelForSingularBucket("All") //
+            .setPercentFormat(NumberFormat.getPercentInstance(Locale.US)) //
+            .setMaxBarGraphWidth(60) //
+            .build());
 
     output.println("As a histogram:");
     output.println(histoFormatter.format(histo));

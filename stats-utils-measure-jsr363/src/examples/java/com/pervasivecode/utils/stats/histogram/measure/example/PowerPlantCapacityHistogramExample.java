@@ -21,7 +21,8 @@ import com.pervasivecode.utils.measure.SiPrefixSelector;
 import com.pervasivecode.utils.stats.histogram.BucketSelector;
 import com.pervasivecode.utils.stats.histogram.ConcurrentHistogram;
 import com.pervasivecode.utils.stats.histogram.Histogram;
-import com.pervasivecode.utils.stats.histogram.measure.ConsoleHistogramQuantityFormatter;
+import com.pervasivecode.utils.stats.histogram.HistogramFormat;
+import com.pervasivecode.utils.stats.histogram.HistogramFormatter;
 import com.pervasivecode.utils.stats.histogram.measure.QuantityBucketSelectors;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.MetricPrefix;
@@ -63,8 +64,15 @@ public class PowerPlantCapacityHistogramExample implements ExampleApplication {
     QuantityPrefixSelector prefixer = new SiPrefixSelector();
     NumberFormat numFormatter = NumberFormat.getInstance(Locale.US);
     QuantityFormatter<Power> formatter = new ScalingFormatter<>(baseUnit, prefixer, numFormatter);
-    ConsoleHistogramQuantityFormatter<Power> histoFormatter =
-        new ConsoleHistogramQuantityFormatter<>(formatter, 60);
+    NumberFormat percentFormat = NumberFormat.getPercentInstance(Locale.US);
+    percentFormat.setMaximumFractionDigits(1);
+    HistogramFormatter<Quantity<Power>> histoFormatter = new HistogramFormatter<>( //
+        HistogramFormat.<Quantity<Power>>builder() //
+            .setUpperBoundValueFormatter((q) -> formatter.format(q)) ///
+            .setLabelForSingularBucket("All") //
+            .setPercentFormat(percentFormat) //
+            .setMaxBarGraphWidth(60) //
+            .build());
 
     output.println("As a histogram:");
     output.println(histoFormatter.format(histo));

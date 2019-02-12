@@ -18,9 +18,9 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
   static final String NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE =
       "There is no upper bound for the last bucket.";
 
-  protected abstract ImmutableList<Long> countByBucket();
+  protected abstract List<Long> countByBucket();
 
-  protected abstract ImmutableList<T> bucketUpperBounds();
+  protected abstract List<T> bucketUpperBounds();
 
   @Override
   public int numBuckets() {
@@ -62,11 +62,7 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
      * @param countByBucket The list of value-counts, in ascending bucket-index order.
      * @return A builder that can be used to finish creating an ImmutableHistogram instance.
      */
-    public Builder<T> setCountByBucket(List<Long> countByBucket) {
-      return this.setCountByBucket(ImmutableList.copyOf(countByBucket));
-    }
-
-    protected abstract Builder<T> setCountByBucket(ImmutableList<Long> countByBucket);
+    public abstract Builder<T> setCountByBucket(List<Long> countByBucket);
 
     /**
      * Set the upper bounds of each of the buckets that has an upper bound, all at once. This list's
@@ -75,13 +71,9 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
      * @param bucketUpperBounds The list of bucket upper bounds, in ascending bucket-index order.
      * @return A builder that can be used to finish creating an ImmutableHistogram instance.
      */
-    public Builder<T> setBucketUpperBounds(List<T> bucketUpperBounds) {
-      return setBucketUpperBounds(ImmutableList.copyOf(bucketUpperBounds));
-    }
+    public abstract Builder<T> setBucketUpperBounds(List<T> bucketUpperBounds);
 
-    protected abstract Builder<T> setBucketUpperBounds(ImmutableList<T> bucketUpperBounds);
-
-    protected abstract ImmutableHistogram<T> autoBuild();
+    protected abstract ImmutableHistogram<T> buildInternal();
 
     /**
      * Validate the countByBucket and bucketUpperBounds values and create an ImmutableHistogram.
@@ -92,7 +84,7 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
      *         values is anything other than one less than the number of counts by bucket.
      */
     public ImmutableHistogram<T> build() {
-      ImmutableHistogram<T> unvalidated = autoBuild();
+      ImmutableHistogram<T> unvalidated = buildInternal();
 
       if (unvalidated.countByBucket().isEmpty()) {
         throw new IllegalStateException("countByBucket cannot be empty");

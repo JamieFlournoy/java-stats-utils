@@ -20,4 +20,15 @@ public class FunctionBasedBucketSelectorTest {
     checkInvalidNumBuckets(0);
   }
 
+  @Test
+  public void bucketUpperBound_withLastBucketIndex_shouldThrow() {
+    BucketSelector<Integer> selector =
+        new FunctionBasedBucketSelector<>((v) -> v, (v) -> v, 4);
+    try {
+      selector.bucketUpperBound(3);
+      Truth.assert_().fail("Expected an exception since the last bucket has no upper bound.");
+    } catch (IllegalArgumentException iae) {
+      assertThat(iae).hasMessageThat().contains("no upper bound");
+    }
+  }
 }

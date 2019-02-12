@@ -1,11 +1,14 @@
 package com.pervasivecode.utils.stats.histogram;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
  * Utility methods for working with Histograms.
  */
 public class Histograms {
+  private Histograms() {}
+
   /**
    * Transform a histogram's upper bound values using a Function.
    *
@@ -19,6 +22,9 @@ public class Histograms {
    */
   public static <T, V> Histogram<V> transformValues(Histogram<T> input,
       Function<T, V> transformation) {
+    Objects.requireNonNull(input, "The input histogram parameter is required.");
+    Objects.requireNonNull(transformation, "The transformation function parameter is required.");
+
     return new Histogram<V>() {
       @Override
       public int numBuckets() {
