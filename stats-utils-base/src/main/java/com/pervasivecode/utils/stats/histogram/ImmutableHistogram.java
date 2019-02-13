@@ -2,8 +2,12 @@ package com.pervasivecode.utils.stats.histogram;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
+import static com.google.common.base.Preconditions.checkState;
 import java.util.List;
+import java.util.Objects;
+import javax.annotation.concurrent.Immutable;
 import com.google.auto.value.AutoValue;
+import com.google.auto.value.extension.memoized.Memoized;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -14,6 +18,7 @@ import com.google.common.collect.ImmutableList;
  * @see BucketingSystem
  */
 @AutoValue
+@Immutable // <- so that static analysis tools will verify that it really is immutable
 public abstract class ImmutableHistogram<T> implements Histogram<T> {
   static final String NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE =
       "There is no upper bound for the last bucket.";
@@ -40,6 +45,26 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
   }
 
   /**
+   * Get the maximum bucket count value.
+   *
+   * @return The largest bucket count value.
+   */
+  @Memoized
+  public long maxCount() {
+    return countByBucket().stream().max((a, b) -> a.compareTo(b)).get();
+  }
+
+  /**
+   * Get a total of the bucket counts.
+   *
+   * @return The total of all bucket counts.
+   */
+  @Memoized
+  public long totalCount() {
+    return countByBucket().stream().reduce(0L, (a, b) -> a + b);
+  }
+
+  /**
    * Obtain a builder that allows construction of a new instance.
    *
    * @param <V> The type of value counted by this Histogram.
@@ -47,6 +72,21 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
    */
   public static <V> ImmutableHistogram.Builder<V> builder() {
     return new AutoValue_ImmutableHistogram.Builder<>();
+  }
+
+  /**
+   * Obtain a builder that allows construction of a new instance, prepopulated with values from
+   * another instance.
+   *
+   * @param histogram The instance whose values should be used to populate the new Builder instance.
+   * @param <V> The type of value counted by this Histogram.
+   * @return a new Builder instance with the same values as the {@code histogram} parameter.
+   */
+  public static <V> ImmutableHistogram.Builder<V> builder(ImmutableHistogram<V> histogram) {
+    Objects.requireNonNull(histogram, "The input histogram cannot be null.");
+    return new AutoValue_ImmutableHistogram.Builder<V>()
+        .setBucketUpperBounds(histogram.bucketUpperBounds())
+        .setCountByBucket(histogram.countByBucket());
   }
 
   /**
@@ -91,18 +131,43 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
       }
       int numUpperBounds = unvalidated.bucketUpperBounds().size();
       int expectedNumUpperBounds = unvalidated.countByBucket().size() - 1;
-      if (numUpperBounds != expectedNumUpperBounds) {
-        throw new IllegalStateException(
-            String.format("Wrong number of bucketUpperBounds values. (Expected %d, got %d)",
-                expectedNumUpperBounds, numUpperBounds));
+      checkState(numUpperBounds == expectedNumUpperBounds,
+            "Wrong number of bucketUpperBounds values. (Expected %s, got %s)",
+                expectedNumUpperBounds, numUpperBounds);
+
+      // Ensure that the countByBucket and bucketUpperBounds lists are really immutable.
+      if (unvalidated.countByBucket() instanceof ImmutableList &&
+          unvalidated.bucketUpperBounds() instanceof ImmutableList) {
+        return unvalidated;
       }
-      return unvalidated;
+
+      final ImmutableList<Long> immutableCountByBucket;
+      try {
+        immutableCountByBucket = ImmutableList.copyOf(unvalidated.countByBucket());
+      } catch (NullPointerException npe) {
+        throw new IllegalStateException("countByBucket cannot contain any null values.", npe);
+      }
+
+      final ImmutableList<T> immutableUpperBounds;
+      try {
+        immutableUpperBounds = ImmutableList.copyOf(unvalidated.bucketUpperBounds());
+      } catch (NullPointerException npe) {
+        throw new IllegalStateException("upperBounds cannot contain any null values.", npe);
+      }
+
+      return ImmutableHistogram.builder(unvalidated) //
+          .setCountByBucket(immutableCountByBucket) //
+          .setBucketUpperBounds(immutableUpperBounds) //
+          .build();
     }
   }
 
   /**
    * Make an immutable copy of another histogram with the same value type, size, bucket upper bounds
    * and value counts.
+   * <p>
+   * This method will always make a copy, as opposed to {@link ImmutableHistogram#from(Histogram)}
+   * which will return the input histogram if it was already an {@code ImmutableHistogram}.
    *
    * @param histogram The histogram to copy.
    * @param <V> The type of value counted by this Histogram.
@@ -120,5 +185,21 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
     }
     return ImmutableHistogram.<V>builder().setBucketUpperBounds(maxValuesBuilder.build())
         .setCountByBucket(bucketValuesBuilder.build()).build();
+  }
+
+  /**
+   * Return an ImmutableHistogram with the same contents as the {@code histogram} parameter. If the
+   * {@code histogram} parameter is already an instance of {@code ImmutableHistogram}, it is
+   * returned. (This is different from {@link #copyOf(Histogram)}, which will always return a copy.}
+   *
+   * @param histogram The {@code Histogram} to return as an {@code ImmutableHistogram}.
+   * @return A copy of the input histogram, or (if the input histogram is already an
+   *         {@code ImmutableHistogram}, the input histogram.
+   */
+  public static <V> ImmutableHistogram<V> from(Histogram<V> histogram) {
+    if (histogram instanceof ImmutableHistogram) {
+      return (ImmutableHistogram<V>) histogram;
+    }
+    return ImmutableHistogram.copyOf(histogram);
   }
 }

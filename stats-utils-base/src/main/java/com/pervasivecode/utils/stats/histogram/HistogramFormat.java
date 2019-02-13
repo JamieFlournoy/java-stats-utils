@@ -4,24 +4,51 @@ import java.text.NumberFormat;
 import java.util.function.Function;
 import com.google.auto.value.AutoValue;
 
+/**
+ * Configuration for a {@link HistogramFormatter}.
+ *
+ * @param <T> The type of value that this HistogramFormat can handle.
+ */
 @AutoValue
 public abstract class HistogramFormat<T> {
 
+
+  /**
+   * A function that formats a bucket upper bound value as a String.
+   *
+   * @return The value formatter function.
+   */
   public abstract Function<T, String> upperBoundValueFormatter();
 
+  /**
+   * The string label to use when the Histogram contains exactly one bucket.
+   *
+   * @return
+   */
   public abstract String labelForSingularBucket();
 
+  /**
+   * A NumberFormat that formats the percentage value representing the part of the total count that
+   * is represented by the current bucket.
+   *
+   * @return The NumberFormat to use when formatting percent values.
+   */
   public abstract NumberFormat percentFormat();
 
+  /**
+   * The maximum width of the bar graph portion of the formatted representation, in characters.
+   *
+   * @return The maximum width of the bar graph.
+   */
   public abstract int maxBarGraphWidth();
-  // TODO add a config field that is itself an autovalue object, with a maxFormattedWidth option.
-  // let the formatter figure out the maxBarGraphWidth if that option is given, allowing a
-  // zero-maxBarGraphWidth and adding a config option for what to do if the maxFormattedWidth is
-  // impossible. (throw, silently exceed the maximum, or drop the % column)
-  
+  // TODO add a way to specify the width of the whole thing
+  // TODO add a policy specification about how to handle situations where max width requires
+  // dropping columns (OK to not show bar graph? OK to not show %?)
+  // TODO generalize % into a Function that decides if percent or %+count or whatever should be
+  // shown.
+
   public static <T> HistogramFormat.Builder<T> builder() {
-    return new AutoValue_HistogramFormat.Builder<T>()
-        .setLabelForSingularBucket("?");
+    return new AutoValue_HistogramFormat.Builder<T>().setLabelForSingularBucket("?");
   }
 
   @AutoValue.Builder
@@ -31,7 +58,7 @@ public abstract class HistogramFormat<T> {
 
     public abstract HistogramFormat.Builder<T> setLabelForSingularBucket(
         String labelForSingularBucket);
-    
+
     public abstract HistogramFormat.Builder<T> setPercentFormat(NumberFormat percentFormat);
 
     public abstract HistogramFormat.Builder<T> setMaxBarGraphWidth(int maxBarGraphWidth);
@@ -41,10 +68,7 @@ public abstract class HistogramFormat<T> {
     public HistogramFormat<T> build() {
       HistogramFormat<T> format = buildInternal();
 
-      // TODO maxBarGraphWidth >=0
-      // checkArgument(format.maxBarGraphWidth() > 1, "maxWidth must be at least 2.");
-
-      // TODO add hideBarGraph
+      // TODO verify that maxBarGraphWidth >=0; verify that maxBarGraphWidth=0 works
 
       return format;
     }
