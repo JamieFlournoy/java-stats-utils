@@ -6,33 +6,19 @@ import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.concurrent.Immutable;
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
 @Immutable
 @AutoValue
 public abstract class HorizontalBarGraph {
-  protected static class FormattingHints {
+  static class FormattingHints {
     int maxBarWidth = -1;
     int maxFormattedMagnitudeLength = -1;
     int maxLabelWidth = -1;
     long maxMagnitude = -1;
   }
 
-  public static HorizontalBarGraph.Builder builder() {
-    return new AutoValue_HorizontalBarGraph.Builder().setBarPart('*')
-        .setFormattingHints(new FormattingHints());
-  }
-
-  public static HorizontalBarGraph.Builder builder(HorizontalBarGraph initialValues) {
-    return builder()
-        .setBarPart(initialValues.barPart()) //
-        .setFormattedMagnitudes(initialValues.formattedMagnitudes()) //
-        .setFormattingHints(initialValues.formattingHints()) //
-        .setLabels(initialValues.labels()) //
-        .setMagnitudes(initialValues.magnitudes()) //
-        .setNumRows(initialValues.numRows()) //
-        .setWidth(initialValues.width());
-  }
-  
   protected abstract int width();
 
   protected abstract int numRows();
@@ -47,13 +33,11 @@ public abstract class HorizontalBarGraph {
 
   protected abstract FormattingHints formattingHints();
 
-  @Override
-  public final String toString() {
-    final String labelFormat = "%-" + formattingHints().maxLabelWidth + "s";
-    final String percentFormat = "%" + formattingHints().maxFormattedMagnitudeLength + "s";
+  public String format() {
     final int numRows = numRows();
-
     final int maxBarWidth = formattingHints().maxBarWidth;
+    final int maxFormattedMagnitudeLength = formattingHints().maxFormattedMagnitudeLength;
+    final int maxLabelWidth = formattingHints().maxLabelWidth;
     final long maxMagnitude = formattingHints().maxMagnitude;
 
     final boolean showBar = (maxBarWidth > 0);
@@ -62,10 +46,11 @@ public abstract class HorizontalBarGraph {
 
     final String[] labels = labels().toArray(new String[0]);
     final Long[] magnitudes = magnitudes().toArray(new Long[0]);
+    final String[] formattedMagnitudes = formattedMagnitudes().toArray(new String[0]);
 
     final StringBuilder sb = new StringBuilder();
     for (int i = 0; i < numRows; i++) {
-      sb.append(String.format(labelFormat, labels[i]));
+      sb.append(Strings.padEnd(labels[i], maxLabelWidth, ' '));
       sb.append(' ');
       if (showBar) {
         final double numStars = magnitudes[i] * barWidthPerUnitMagnitude;
@@ -75,10 +60,25 @@ public abstract class HorizontalBarGraph {
         }
         sb.append(' ');
       }
-      sb.append(String.format(percentFormat, formattedMagnitudes().get(i)));
+      sb.append(Strings.padStart(formattedMagnitudes[i], maxFormattedMagnitudeLength, ' '));
       sb.append('\n');
     }
     return sb.toString();
+  }
+
+  public static HorizontalBarGraph.Builder builder() {
+    return new AutoValue_HorizontalBarGraph.Builder().setBarPart('*')
+        .setFormattingHints(new FormattingHints());
+  }
+
+  public static HorizontalBarGraph.Builder builder(HorizontalBarGraph initialValues) {
+    return builder().setBarPart(initialValues.barPart()) //
+        .setFormattedMagnitudes(initialValues.formattedMagnitudes()) //
+        .setFormattingHints(initialValues.formattingHints()) //
+        .setLabels(initialValues.labels()) //
+        .setMagnitudes(initialValues.magnitudes()) //
+        .setNumRows(initialValues.numRows()) //
+        .setWidth(initialValues.width());
   }
 
   @AutoValue.Builder
@@ -100,54 +100,74 @@ public abstract class HorizontalBarGraph {
     protected abstract HorizontalBarGraph buildInternal();
 
     public HorizontalBarGraph build() {
-      HorizontalBarGraph unvalidated = buildInternal();
+      final HorizontalBarGraph unvalidated = buildInternal();
 
-      if (unvalidated.formattingHints().maxLabelWidth >= 0) {
+      final boolean formattingHintsAreSet = unvalidated.formattingHints().maxLabelWidth > -1;
+      if (formattingHintsAreSet) {
         return unvalidated;
       }
-      
-      int maxLabelWidth = maxLength(unvalidated.labels());
-      int maxFormattedMagnitudeLength = maxLength(unvalidated.formattedMagnitudes());
-      int maxBarWidth = unvalidated.width() - (maxLabelWidth + maxFormattedMagnitudeLength + 2);
 
-      int minFormattableWidth = (maxLabelWidth + 1 + maxFormattedMagnitudeLength);
-      checkState(unvalidated.width() >= minFormattableWidth,
+      checkState(unvalidated.labels().size() == unvalidated.numRows(),
+          "The size of the list of labels must match numRows.");
+
+      final int maxLabelWidth;
+      try {
+        maxLabelWidth = maxLength(unvalidated.labels());
+      } catch (NullPointerException npe) {
+        throw new IllegalStateException("labels cannot contain null values.", npe);
+      }
+
+      checkState(unvalidated.magnitudes().size() == unvalidated.numRows(),
+          "The size of the list of magnitudes must match numRows.");
+
+      final int width = unvalidated.width();
+      final int maxFormattedMagnitudeLength = maxLength(unvalidated.formattedMagnitudes());
+      final int minFormattableWidth = (maxLabelWidth + 1 + maxFormattedMagnitudeLength);
+
+      checkState(width >= minFormattableWidth,
           "Width value (%s chars) is too small to fit contents (%s chars wide without bar graph).",
-          unvalidated.width(), minFormattableWidth);
-      
-      FormattingHints hints = new FormattingHints();
-      hints.maxBarWidth = maxBarWidth;
+          width, minFormattableWidth);
+
+      final FormattingHints hints = new FormattingHints();
+      hints.maxBarWidth = width - (maxLabelWidth + maxFormattedMagnitudeLength + 2);
       hints.maxFormattedMagnitudeLength = maxFormattedMagnitudeLength;
       hints.maxLabelWidth = maxLabelWidth;
-      hints.maxMagnitude = max(unvalidated.magnitudes());
-
-      // TODO
-//      checkState(hints.maxFormattedMagnitudeLength > 0,
-//          "formattedMagnitudes must contain at least one nonempty string.");
-//      checkState(hints.maxLabelWidth > 0, "labels must contain at least one nonempty string.");
-//      checkState(hints.maxMagnitude > 0, "magnitudes must contain at least one positive value");
-
-      return HorizontalBarGraph.builder(unvalidated).setFormattingHints(hints).build();
-    }
-  }
-
-  private static int maxLength(List<String> strings) {
-    int max = 0;
-    for (String s : strings) {
-      if (s != null && s.length() > max) {
-        max = s.length();
+      try {
+        hints.maxMagnitude = max(unvalidated.magnitudes());
+      } catch (NullPointerException npe) {
+        throw new IllegalStateException("magnitudes cannot contain null values.", npe);
       }
-    }
-    return max;
-  }
 
-  private static long max(List<Long> magnitudes) {
-    long max = 0L;
-    for (Long l : magnitudes) {
-      if (l != null && l.longValue() > max) {
-        max = l.longValue();
-      }
+      // Return an instance that uses lists that are definitely immutable, with the formatting hints
+      // we have calculated in order to do validation.
+      return HorizontalBarGraph.builder(unvalidated) //
+          .setFormattedMagnitudes(ImmutableList.copyOf(unvalidated.formattedMagnitudes())) //
+          .setLabels(ImmutableList.copyOf(unvalidated.labels())) //
+          .setMagnitudes(ImmutableList.copyOf(unvalidated.magnitudes())) //
+          .setFormattingHints(hints) //
+          .build();
     }
-    return max;
+
+    private static int maxLength(List<String> strings) {
+      int max = 0;
+      for (String s : strings) {
+        if (s.length() > max) {
+          max = s.length();
+        }
+      }
+      return max;
+    }
+
+    private static long max(List<Long> magnitudes) {
+      long max = 0L;
+      for (Long m : magnitudes) {
+        long l = m.longValue();
+        checkState(l >= 0, "Magnitude values must be non-negative.");
+        if (l > max) {
+          max = l;
+        }
+      }
+      return max;
+    }
   }
 }

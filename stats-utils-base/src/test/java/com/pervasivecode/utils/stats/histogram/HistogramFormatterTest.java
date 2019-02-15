@@ -16,7 +16,7 @@ public class HistogramFormatterTest {
         .setCountByBucket(ImmutableList.of(1L)) //
         .build();
   }
-  
+
   private static ImmutableHistogram<Double> threeBucketHistogram() {
     return ImmutableHistogram.<Double>builder() //
         .setBucketUpperBounds(ImmutableList.of(1.0, 5.0)) //
@@ -40,7 +40,7 @@ public class HistogramFormatterTest {
             .setLabelForSingularBucket("All")
             .setPercentFormat(NumberFormat.getPercentInstance(Locale.US)) //
             .setMaxWidth(width) //
-            .build());    
+            .build());
   }
 
   private HistogramFormatter<Double> histoFormatterGermany(int width) {
@@ -78,12 +78,12 @@ public class HistogramFormatterTest {
   private String dePct(double value) {
     return germanyPercentFormat.format(value);
   }
-  
+
   @Test
   public void format_oneBucket_withUsFormat_shouldWork() {
     String expected = "All ************ 100%\n";
     assertThat(histogramFormatterUs(21).format(oneBucketHistogram())).isEqualTo(expected);
-  }  
+  }
 
   @Test
   public void format_oneBucket_withGermanFormat_shouldWork() {
@@ -97,25 +97,25 @@ public class HistogramFormatterTest {
     String expected = "∀ ********** 100%\n";
     assertThat(histogramFormatterDoubleAsHex(17).format(oneBucketHistogram())).isEqualTo(expected);
   }
-  
+
   @Test
   public void format_threeBuckets_withUsFormat_shouldWork() {
     assertThat(histogramFormatterUs(23).format(threeBucketHistogram())).isEqualTo("" //
         + "<= 1.0 **           12%\n" //
         + "<= 5.0 *****        25%\n" //
         + ">  5.0 ************ 62%\n");
-  }  
+  }
 
   @Test
   public void format_threeBuckets_withGermanFormat_shouldWork() {
     String expectedLine1 = "<= 1,0 *       " + dePct(0.125) + "\n";
     String expectedLine2 = "<= 5,0 ***     " + dePct(0.250) + "\n";
     String expectedLine3 = ">  5,0 ******* "+ dePct(0.625) + "\n";
-    
+
     int width = expectedLine1.length() - 1;
     String expected = expectedLine1 + expectedLine2 + expectedLine3;
     assertThat(histoFormatterGermany(width).format(threeBucketHistogram())).isEqualTo(expected);
-  }  
+  }
   @Test
   public void format_threeBuckets_withHexFormat_shouldWork() {
     assertThat(histogramFormatterDoubleAsHex(27).format(threeBucketHistogram())).isEqualTo("" //
@@ -123,7 +123,7 @@ public class HistogramFormatterTest {
         + "<= 0x1.4p2 ****         25%\n" //
         + ">  0x1.4p2 ********** 62.5%\n");
   }
-  
+
   @Test
   public void format_fourBuckets_withUsFormat_shouldWork() {
     assertThat(histogramFormatterUs(24).format(fourBucketHistogram())).isEqualTo("" //

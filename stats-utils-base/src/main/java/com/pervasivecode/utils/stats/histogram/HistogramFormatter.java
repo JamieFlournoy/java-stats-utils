@@ -69,7 +69,7 @@ public class HistogramFormatter<T> {
         .setMagnitudes(magnitudes) //
         .setFormattedMagnitudes(formattedPercentages) //
         .build();
-    return graph.toString();
+    return graph.format();
   }
 
   private String getBucketLabel(int bucketIndex, int lastBucket, Histogram<T> histogram) {

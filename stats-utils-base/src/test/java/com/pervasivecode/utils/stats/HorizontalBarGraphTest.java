@@ -1,62 +1,148 @@
 package com.pervasivecode.utils.stats;
 
-import org.junit.Ignore;
+import static com.google.common.truth.Truth.assertThat;
+import java.util.ArrayList;
 import org.junit.Test;
+import com.google.common.collect.ImmutableList;
 import com.google.common.truth.Truth;
 
 public class HorizontalBarGraphTest {
 
-  @Ignore
+  private HorizontalBarGraph.Builder validBuilder() {
+    return HorizontalBarGraph.builder().setBarPart('#') //
+        .setFormattedMagnitudes(ImmutableList.of("x", "y", "z")) //
+        .setLabels(ImmutableList.of("A ->", "B ->", "C -->")) //
+        .setMagnitudes(ImmutableList.of(123L, 45L, 6L)) //
+        .setNumRows(3) //
+        .setWidth(20);
+  }
+
   @Test
   public void build_withZeroRows_shouldThrow() {
-    Truth.assert_().fail();
+    try {
+      validBuilder().setNumRows(0).build();
+      Truth.assert_().fail("Expected an exception due to the numRows value of 0.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("numRows");
+    }
   }
 
-  @Ignore
   @Test
   public void build_withZeroWidth_shouldThrow() {
-    Truth.assert_().fail();
+    try {
+      validBuilder().setWidth(0).build();
+      Truth.assert_().fail("Expected an exception due to the zero width value.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("Width");
+    }
   }
 
-  @Ignore
   @Test
   public void build_withImpossibleWidth_shouldThrow() {
-    Truth.assert_().fail();
+    try {
+      validBuilder().setWidth(5).build();
+      Truth.assert_().fail("Expected an exception due to the width being too narrow.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("Width");
+    }
   }
 
-  @Ignore
   @Test
   public void build_withWidthSoSmallGraphIsZeroWidth_shouldWork() {
-    Truth.assert_().fail();
+    // Widest row is "C --> z"
+    HorizontalBarGraph graph = validBuilder().setWidth(7).build();
+    assertThat(graph.format()).isEqualTo("" //
+        + "A ->  x\n" //
+        + "B ->  y\n" //
+        + "C --> z\n");
   }
 
-  @Ignore
   @Test
   public void build_withNullLabels_shouldThrow() {
-    Truth.assert_().fail();
+    ArrayList<String> labels = new ArrayList<>();
+    labels.add("label1");
+    labels.add(null);
+    labels.add("label3");
+    try {
+      validBuilder().setLabels(labels).build();
+      Truth.assert_().fail("Expected an exception due to the presence of a null label value.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("labels");
+    }
   }
 
-  @Ignore
   @Test
   public void build_withWrongNumberOfLabels_shouldThrow() {
-    Truth.assert_().fail();
+    try {
+      validBuilder().setLabels(ImmutableList.of("label1", "label2")).build();
+      Truth.assert_().fail("Expected an exception due to the missing label value.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("labels");
+    }
   }
 
-  @Ignore
   @Test
   public void build_withNullMagnitudes_shouldThrow() {
-    Truth.assert_().fail();
+    ArrayList<Long> magnitudes = new ArrayList<Long>();
+    magnitudes.add(47L);
+    magnitudes.add(null);
+    magnitudes.add(901L);
+    try {
+      validBuilder().setMagnitudes(magnitudes).build();
+      Truth.assert_().fail("Expected an exception due to the presence of a null magnitude value.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("magnitudes");
+    }
   }
 
-  @Ignore
   @Test
   public void build_withWrongNumberOfMagnitudes_shouldThrow() {
-    Truth.assert_().fail();
+    try {
+      validBuilder().setMagnitudes(ImmutableList.of(47L, 901L)).build();
+      Truth.assert_().fail("Expected an exception due to the missing magnitude value.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("magnitudes");
+    }
   }
 
-  @Ignore
   @Test
-  public void toString_shouldWork() {
-    Truth.assert_().fail();
+  public void build_withAnyNegativeMagnitudes_shouldThrow() {
+    try {
+      validBuilder().setMagnitudes(ImmutableList.of(47L, -31L, 901L)).build();
+      Truth.assert_().fail("Expected an exception due to a negative magnitude value.");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("negative");
+    }
   }
+
+  @Test
+  public void format_shouldWork() {
+    HorizontalBarGraph.Builder builder = validBuilder();
+    assertThat(builder.build().format()).isEqualTo("" //
+        + "A ->  ############ x\n" //
+        + "B ->  ####         y\n" //
+        + "C --> #            z\n");
+
+    HorizontalBarGraph graph = builder.setWidth(10).build();
+    assertThat(builder.build().format()).isEqualTo("" //
+        + "A ->  ## x\n" //
+        + "B ->  #  y\n" //
+        + "C -->    z\n");
+
+    graph = builder.setWidth(9).build();
+    assertThat(builder.build().format()).isEqualTo("" //
+        + "A ->  # x\n" //
+        + "B ->    y\n" //
+        + "C -->   z\n");
+
+    graph = builder.setWidth(8).build();
+    String noBarExpected = "" //
+        + "A ->  x\n" //
+        + "B ->  y\n" //
+        + "C --> z\n";
+    assertThat(graph.format()).isEqualTo(noBarExpected);
+
+    graph = builder.setWidth(7).build();
+    assertThat(graph.format()).isEqualTo(noBarExpected);
+}
 }
