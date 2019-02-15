@@ -1,6 +1,7 @@
 package com.pervasivecode.utils.stats.histogram;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.pervasivecode.utils.stats.histogram.HistogramBucketCountFormatters.percentFormatter;
 import java.text.NumberFormat;
 import java.util.Locale;
 import org.junit.Before;
@@ -38,7 +39,7 @@ public class HistogramFormatterTest {
         HistogramFormat.<Double>builder() //
             .setUpperBoundValueFormatter((d) -> usNumberFormat.format(d)) //
             .setLabelForSingularBucket("All")
-            .setPercentFormat(NumberFormat.getPercentInstance(Locale.US)) //
+            .setBucketCountFormatter(percentFormatter(Locale.US)) //
             .setMaxWidth(width) //
             .build());
   }
@@ -50,7 +51,7 @@ public class HistogramFormatterTest {
         HistogramFormat.<Double>builder() //
             .setUpperBoundValueFormatter((d) -> germanyNumberFormat.format(d)) //
             .setLabelForSingularBucket("Alles")
-            .setPercentFormat(germanyPercentFormat) //
+            .setBucketCountFormatter(percentFormatter(germanyPercentFormat)) //
             .setMaxWidth(width) //
             .build());
   }
@@ -62,7 +63,7 @@ public class HistogramFormatterTest {
         HistogramFormat.<Double>builder() //
             .setUpperBoundValueFormatter((d) -> Double.toHexString(d)) //
             .setLabelForSingularBucket("∀")
-            .setPercentFormat(otherUsNumberFormat) //
+            .setBucketCountFormatter(percentFormatter(otherUsNumberFormat)) //
             .setMaxWidth(width) //
             .build());
   }

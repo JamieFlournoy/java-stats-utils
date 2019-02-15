@@ -3,7 +3,9 @@ package com.pervasivecode.utils.stats.histogram;
 import static com.google.common.base.Preconditions.checkArgument;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import javax.annotation.concurrent.Immutable;
 import com.pervasivecode.utils.stats.HorizontalBarGraph;
 
 /**
@@ -25,6 +27,7 @@ import com.pervasivecode.utils.stats.HorizontalBarGraph;
  * @param <T> The type of value the histogram counted.
  * @see BucketingSystem
  */
+@Immutable
 public class HistogramFormatter<T> {
   private final HistogramFormat<T> format;
 
@@ -48,26 +51,26 @@ public class HistogramFormatter<T> {
   private String formatInternal(ImmutableHistogram<T> histogram) {
     final int bucketCount = histogram.numBuckets();
 
-    ArrayList<String> bucketLabels = new ArrayList<>(bucketCount);
-    ArrayList<Long> magnitudes = new ArrayList<>(bucketCount);
-    ArrayList<String> formattedPercentages = new ArrayList<>(bucketCount);
+    final ArrayList<String> bucketLabels = new ArrayList<>(bucketCount);
+    final ArrayList<Long> magnitudes = new ArrayList<>(bucketCount);
+    final ArrayList<String> formattedMagnitudes = new ArrayList<>(bucketCount);
 
+    final long totalCount = histogram.totalCount();
+    final BiFunction<Long, Long, String> bucketCountFormatter = format.bucketCountFormatter();
     final int lastBucket = bucketCount - 1;
     for (int i = 0; i <= lastBucket; i++) {
       bucketLabels.add(getBucketLabel(i, lastBucket, histogram));
-
-      magnitudes.add(histogram.countInBucket(i));
-
-      final double percent = (double) histogram.countInBucket(i) / histogram.totalCount();
-      formattedPercentages.add(format.percentFormat().format(percent));
+      final long count = histogram.countInBucket(i);
+      magnitudes.add(count);
+      formattedMagnitudes.add(bucketCountFormatter.apply(count, totalCount));
     }
 
-    HorizontalBarGraph graph = HorizontalBarGraph.builder() //
+    final HorizontalBarGraph graph = HorizontalBarGraph.builder() //
         .setWidth(format.maxWidth()) //
         .setNumRows(bucketCount) //
         .setLabels(bucketLabels) //
         .setMagnitudes(magnitudes) //
-        .setFormattedMagnitudes(formattedPercentages) //
+        .setFormattedMagnitudes(formattedMagnitudes) //
         .build();
     return graph.format();
   }
@@ -76,11 +79,11 @@ public class HistogramFormatter<T> {
     final Function<T, String> upperBoundValueFormatter = format.upperBoundValueFormatter();
     final int i = bucketIndex;
     if (i < lastBucket) {
-      T bucketUpperBound = histogram.bucketUpperBound(i);
+      final T bucketUpperBound = histogram.bucketUpperBound(i);
       return String.format("<= %s", upperBoundValueFormatter.apply(bucketUpperBound));
     } else {
       if (lastBucket > 0) {
-        T openLowerBoundValue = histogram.bucketUpperBound(i - 1);
+        final T openLowerBoundValue = histogram.bucketUpperBound(i - 1);
         return String.format(">  %s", upperBoundValueFormatter.apply(openLowerBoundValue));
       } else {
         return format.labelForSingularBucket();

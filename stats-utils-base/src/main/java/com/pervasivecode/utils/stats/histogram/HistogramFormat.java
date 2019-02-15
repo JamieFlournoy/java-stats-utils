@@ -1,18 +1,19 @@
 package com.pervasivecode.utils.stats.histogram;
 
-import java.text.NumberFormat;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import javax.annotation.concurrent.Immutable;
 import com.google.auto.value.AutoValue;
 
 /**
  * Configuration for a {@link HistogramFormatter}.
  *
  * @param <T> The type of value that this HistogramFormat can handle.
+ * @see HistogramBucketCountFormatters
  */
 @AutoValue
+@Immutable
 public abstract class HistogramFormat<T> {
-
-
   /**
    * A function that formats a bucket upper bound value as a String.
    *
@@ -28,12 +29,16 @@ public abstract class HistogramFormat<T> {
   public abstract String labelForSingularBucket();
 
   /**
-   * A NumberFormat that formats the percentage value representing the part of the total count that
-   * is represented by the current bucket.
+   * A BiFunction that specifies how a bucket count value should be displayed.
+   * <p>
+   * This could be a percentage of the total number of items counted by the histogram across all
+   * buckets, or just the bucket count itself if a percentage is not desired.
    *
-   * @return The NumberFormat to use when formatting percent values.
+   * @return bucketCountFormatter A {@link BiFunction} that takes a {@code Long} bucket count, a
+   *         {@code Long} total of all bucket counts, and returns a {@code String} formatted
+   *         representation.
    */
-  public abstract NumberFormat percentFormat();
+  public abstract BiFunction<Long, Long, String> bucketCountFormatter();
 
   /**
    * The maximum width of the formatted representation, in characters.
@@ -41,13 +46,27 @@ public abstract class HistogramFormat<T> {
    * @return The maximum width of the bar graph.
    */
   public abstract int maxWidth();
-  // TODO generalize % into a Function that decides if percent or %+count or whatever should be
-  // shown.
 
+  /**
+   * Create a new {@link HistogramFormat.Builder} instance.
+   * <p>
+   * This builder is mostly unconfigured, except for the following default values:
+   * <ul>
+   * <li>labelForSingularBucket = "?"</li>
+   * </ul>
+   *
+   * @return The new {@link HistogramFormat.Builder} instance.
+   */
   public static <T> HistogramFormat.Builder<T> builder() {
     return new AutoValue_HistogramFormat.Builder<T>().setLabelForSingularBucket("?");
   }
 
+  /**
+   * This object is used to construct a HistogramFormat instance. See {@link HistogramFormat} for
+   * explanations of what these values mean.
+   *
+   * @param <T> The type of value that the constructed HistogramFormat will be able to handle.
+   */
   @AutoValue.Builder
   public static abstract class Builder<T> {
     public abstract HistogramFormat.Builder<T> setUpperBoundValueFormatter(
@@ -56,17 +75,11 @@ public abstract class HistogramFormat<T> {
     public abstract HistogramFormat.Builder<T> setLabelForSingularBucket(
         String labelForSingularBucket);
 
-    public abstract HistogramFormat.Builder<T> setPercentFormat(NumberFormat percentFormat);
+    public abstract HistogramFormat.Builder<T> setBucketCountFormatter(
+        BiFunction<Long, Long, String> bucketCountFormatter);
 
     public abstract HistogramFormat.Builder<T> setMaxWidth(int maxWidth);
 
-    protected abstract HistogramFormat<T> buildInternal();
-
-    public HistogramFormat<T> build() {
-      HistogramFormat<T> format = buildInternal();
-
-
-      return format;
-    }
+    public abstract HistogramFormat<T> build();
   }
 }

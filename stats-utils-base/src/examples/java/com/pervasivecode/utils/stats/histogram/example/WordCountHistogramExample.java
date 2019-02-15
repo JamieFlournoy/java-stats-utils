@@ -1,5 +1,6 @@
 package com.pervasivecode.utils.stats.histogram.example;
 
+import static com.pervasivecode.utils.stats.histogram.HistogramBucketCountFormatters.percentFormatter;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -21,8 +22,8 @@ import com.pervasivecode.utils.stats.histogram.MutableHistogram;
 import com.pervasivecode.utils.stats.histogram.example.ExampleApplication;
 
 /**
- * Demonstration of how to create, populate, and format the contents of a {@link Histogram}
- * counting word lengths for each of the words in a text document.
+ * Demonstration of how to create, populate, and format the contents of a {@link Histogram} counting
+ * word lengths for each of the words in a text document.
  */
 public class WordCountHistogramExample implements ExampleApplication {
   private static final String ULYSSES_RESOURCE_PATH =
@@ -67,7 +68,7 @@ public class WordCountHistogramExample implements ExampleApplication {
         HistogramFormat.<Long>builder() //
             .setUpperBoundValueFormatter((v) -> usNumberFormat.format(v)) //
             .setLabelForSingularBucket("All") //
-            .setPercentFormat(NumberFormat.getPercentInstance(Locale.US)) //
+            .setBucketCountFormatter(percentFormatter(Locale.US)) //
             .setMaxWidth(69) //
             .build());
 

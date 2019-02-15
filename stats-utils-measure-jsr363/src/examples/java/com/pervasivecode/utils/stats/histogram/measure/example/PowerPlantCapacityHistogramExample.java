@@ -1,5 +1,6 @@
 package com.pervasivecode.utils.stats.histogram.measure.example;
 
+import static com.pervasivecode.utils.stats.histogram.HistogramBucketCountFormatters.percentFormatter;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -29,9 +30,9 @@ import tec.uom.se.unit.MetricPrefix;
 import tec.uom.se.unit.Units;
 
 /**
- * Demonstration of how to create, populate, and format the contents of a {@link Histogram}
- * counting {@link Quantity}{@code <}{@link Power}{@code >} values representing the electricity
- * generation capacities of over 28,000 known power plants worldwide.
+ * Demonstration of how to create, populate, and format the contents of a {@link Histogram} counting
+ * {@link Quantity}{@code <}{@link Power}{@code >} values representing the electricity generation
+ * capacities of over 28,000 known power plants worldwide.
  */
 public class PowerPlantCapacityHistogramExample implements ExampleApplication {
   private static final String CAPACITIES_RESOURCE_PATH = "com/pervasivecode/utils/stats/"
@@ -68,9 +69,9 @@ public class PowerPlantCapacityHistogramExample implements ExampleApplication {
     percentFormat.setMaximumFractionDigits(1);
     HistogramFormatter<Quantity<Power>> histoFormatter = new HistogramFormatter<>( //
         HistogramFormat.<Quantity<Power>>builder() //
-            .setUpperBoundValueFormatter((q) -> formatter.format(q)) ///
+            .setUpperBoundValueFormatter((q) -> formatter.format(q)) //
             .setLabelForSingularBucket("All") //
-            .setPercentFormat(percentFormat) //
+            .setBucketCountFormatter(percentFormatter(percentFormat)) //
             .setMaxWidth(76) //
             .build());
 
