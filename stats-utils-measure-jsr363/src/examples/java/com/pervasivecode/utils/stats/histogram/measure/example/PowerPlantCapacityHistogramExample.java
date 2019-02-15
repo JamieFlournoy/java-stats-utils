@@ -71,7 +71,7 @@ public class PowerPlantCapacityHistogramExample implements ExampleApplication {
             .setUpperBoundValueFormatter((q) -> formatter.format(q)) ///
             .setLabelForSingularBucket("All") //
             .setPercentFormat(percentFormat) //
-            .setMaxBarGraphWidth(60) //
+            .setMaxWidth(76) //
             .build());
 
     output.println("As a histogram:");

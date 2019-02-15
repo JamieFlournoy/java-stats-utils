@@ -36,14 +36,11 @@ public abstract class HistogramFormat<T> {
   public abstract NumberFormat percentFormat();
 
   /**
-   * The maximum width of the bar graph portion of the formatted representation, in characters.
+   * The maximum width of the formatted representation, in characters.
    *
    * @return The maximum width of the bar graph.
    */
-  public abstract int maxBarGraphWidth();
-  // TODO add a way to specify the width of the whole thing
-  // TODO add a policy specification about how to handle situations where max width requires
-  // dropping columns (OK to not show bar graph? OK to not show %?)
+  public abstract int maxWidth();
   // TODO generalize % into a Function that decides if percent or %+count or whatever should be
   // shown.
 
@@ -61,14 +58,13 @@ public abstract class HistogramFormat<T> {
 
     public abstract HistogramFormat.Builder<T> setPercentFormat(NumberFormat percentFormat);
 
-    public abstract HistogramFormat.Builder<T> setMaxBarGraphWidth(int maxBarGraphWidth);
+    public abstract HistogramFormat.Builder<T> setMaxWidth(int maxWidth);
 
     protected abstract HistogramFormat<T> buildInternal();
 
     public HistogramFormat<T> build() {
       HistogramFormat<T> format = buildInternal();
 
-      // TODO verify that maxBarGraphWidth >=0; verify that maxBarGraphWidth=0 works
 
       return format;
     }

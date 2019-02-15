@@ -195,7 +195,7 @@ public class ImmutableHistogramTest {
   }
 
   //
-  // Tests for countInBucket, maxCount, and totalCount
+  // Tests for countInBucket and totalCount
   //
   
   @Test
@@ -207,12 +207,6 @@ public class ImmutableHistogramTest {
     assertThat(histogram.countInBucket(0)).isEqualTo(42L);
     assertThat(histogram.countInBucket(1)).isEqualTo(37L);
     assertThat(histogram.countInBucket(2)).isEqualTo(17L);
-  }
-
-  @Test
-  public void maxCount_shouldWork() {
-    ImmutableHistogram<Integer> histogram = makeHistogramOfIntegerPower2Of2();
-    assertThat(histogram.maxCount()).isEqualTo(10L);
   }
 
   @Test

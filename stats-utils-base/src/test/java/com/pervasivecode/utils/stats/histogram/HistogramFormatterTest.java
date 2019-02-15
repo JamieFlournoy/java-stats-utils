@@ -8,6 +8,8 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 public class HistogramFormatterTest {
+  // TODO Simplify this test. Move some of this into HorizontalBarGraphTest.
+
   private static ImmutableHistogram<Double> oneBucketHistogram() {
     return ImmutableHistogram.<Double>builder() //
         .setBucketUpperBounds(ImmutableList.of()) //
@@ -29,44 +31,48 @@ public class HistogramFormatterTest {
         .build();
   }
 
-  private HistogramFormatter<Double> histogramFormatterUs;
-  private HistogramFormatter<Double> histogramFormatterGermany;
-  private HistogramFormatter<Double> histogramFormatterDoubleAsHex;
-  private NumberFormat germanyPercentFormat;
-
-  @Before
-  public void setup() {
+  private HistogramFormatter<Double> histogramFormatterUs(int width) {
     NumberFormat usNumberFormat = NumberFormat.getNumberInstance(Locale.US);
     usNumberFormat.setMinimumFractionDigits(1);
-    histogramFormatterUs = new HistogramFormatter<Double>(//
+    return new HistogramFormatter<Double>(//
         HistogramFormat.<Double>builder() //
             .setUpperBoundValueFormatter((d) -> usNumberFormat.format(d)) //
             .setLabelForSingularBucket("All")
             .setPercentFormat(NumberFormat.getPercentInstance(Locale.US)) //
-            .setMaxBarGraphWidth(12) //
-            .build());
+            .setMaxWidth(width) //
+            .build());    
+  }
 
+  private HistogramFormatter<Double> histoFormatterGermany(int width) {
     NumberFormat germanyNumberFormat = NumberFormat.getNumberInstance(Locale.GERMANY);
     germanyNumberFormat.setMinimumFractionDigits(1);
-    germanyPercentFormat = NumberFormat.getPercentInstance(Locale.GERMANY);
-    germanyPercentFormat.setMinimumFractionDigits(1);
-    histogramFormatterGermany = new HistogramFormatter<Double>( //
+    return new HistogramFormatter<Double>( //
         HistogramFormat.<Double>builder() //
             .setUpperBoundValueFormatter((d) -> germanyNumberFormat.format(d)) //
             .setLabelForSingularBucket("Alles")
             .setPercentFormat(germanyPercentFormat) //
-            .setMaxBarGraphWidth(7) //
+            .setMaxWidth(width) //
             .build());
+  }
 
+  private HistogramFormatter<Double> histogramFormatterDoubleAsHex(int width) {
     NumberFormat otherUsNumberFormat = NumberFormat.getPercentInstance(Locale.US);
     otherUsNumberFormat.setMaximumFractionDigits(3);
-    histogramFormatterDoubleAsHex = new HistogramFormatter<Double>( //
+    return new HistogramFormatter<Double>( //
         HistogramFormat.<Double>builder() //
             .setUpperBoundValueFormatter((d) -> Double.toHexString(d)) //
             .setLabelForSingularBucket("∀")
             .setPercentFormat(otherUsNumberFormat) //
-            .setMaxBarGraphWidth(10) //
+            .setMaxWidth(width) //
             .build());
+  }
+
+  private NumberFormat germanyPercentFormat;
+
+  @Before
+  public void setup() {
+    germanyPercentFormat = NumberFormat.getPercentInstance(Locale.GERMANY);
+    germanyPercentFormat.setMinimumFractionDigits(1);
   }
 
   private String dePct(double value) {
@@ -76,24 +82,25 @@ public class HistogramFormatterTest {
   @Test
   public void format_oneBucket_withUsFormat_shouldWork() {
     String expected = "All ************ 100%\n";
-    assertThat(histogramFormatterUs.format(oneBucketHistogram())).isEqualTo(expected);
+    assertThat(histogramFormatterUs(21).format(oneBucketHistogram())).isEqualTo(expected);
   }  
 
   @Test
   public void format_oneBucket_withGermanFormat_shouldWork() {
     String expected = "Alles ******* " + dePct(1.0) + "\n";
-    assertThat(histogramFormatterGermany.format(oneBucketHistogram())).isEqualTo(expected);
+    int width = expected.length() - 1;
+    assertThat(histoFormatterGermany(width).format(oneBucketHistogram())).isEqualTo(expected);
   }
 
   @Test
   public void format_oneBucket_withHexFormat_shouldWork() {
     String expected = "∀ ********** 100%\n";
-    assertThat(histogramFormatterDoubleAsHex.format(oneBucketHistogram())).isEqualTo(expected);
+    assertThat(histogramFormatterDoubleAsHex(17).format(oneBucketHistogram())).isEqualTo(expected);
   }
   
   @Test
   public void format_threeBuckets_withUsFormat_shouldWork() {
-    assertThat(histogramFormatterUs.format(threeBucketHistogram())).isEqualTo("" //
+    assertThat(histogramFormatterUs(23).format(threeBucketHistogram())).isEqualTo("" //
         + "<= 1.0 **           12%\n" //
         + "<= 5.0 *****        25%\n" //
         + ">  5.0 ************ 62%\n");
@@ -101,15 +108,17 @@ public class HistogramFormatterTest {
 
   @Test
   public void format_threeBuckets_withGermanFormat_shouldWork() {
-    StringBuilder gsb = new StringBuilder();
-    gsb.append("<= 1,0 *       ").append(dePct(0.125)).append("\n");
-    gsb.append("<= 5,0 ***     ").append(dePct(0.250)).append("\n");
-    gsb.append(">  5,0 ******* ").append(dePct(0.625)).append("\n");
-    assertThat(histogramFormatterGermany.format(threeBucketHistogram())).isEqualTo(gsb.toString());
+    String expectedLine1 = "<= 1,0 *       " + dePct(0.125) + "\n";
+    String expectedLine2 = "<= 5,0 ***     " + dePct(0.250) + "\n";
+    String expectedLine3 = ">  5,0 ******* "+ dePct(0.625) + "\n";
+    
+    int width = expectedLine1.length() - 1;
+    String expected = expectedLine1 + expectedLine2 + expectedLine3;
+    assertThat(histoFormatterGermany(width).format(threeBucketHistogram())).isEqualTo(expected);
   }  
   @Test
   public void format_threeBuckets_withHexFormat_shouldWork() {
-    assertThat(histogramFormatterDoubleAsHex.format(threeBucketHistogram())).isEqualTo("" //
+    assertThat(histogramFormatterDoubleAsHex(27).format(threeBucketHistogram())).isEqualTo("" //
         + "<= 0x1.0p0 **         12.5%\n" //
         + "<= 0x1.4p2 ****         25%\n" //
         + ">  0x1.4p2 ********** 62.5%\n");
@@ -117,7 +126,7 @@ public class HistogramFormatterTest {
   
   @Test
   public void format_fourBuckets_withUsFormat_shouldWork() {
-    assertThat(histogramFormatterUs.format(fourBucketHistogram())).isEqualTo("" //
+    assertThat(histogramFormatterUs(24).format(fourBucketHistogram())).isEqualTo("" //
         + "<= 1.0  *********    33%\n" //
         + "<= 5.0  ******       22%\n" //
         + "<= 25.0               0%\n" //
@@ -126,17 +135,20 @@ public class HistogramFormatterTest {
 
   @Test
   public void format_fourBuckets_withGermanFormat_shouldWork() {
-    StringBuilder gsb = new StringBuilder();
-    gsb.append("<= 1,0  *****   ").append(dePct(0.333)).append("\n");
-    gsb.append("<= 5,0  ****    ").append(dePct(0.222)).append("\n");
-    gsb.append("<= 25,0          ").append(dePct(0)).append("\n");
-    gsb.append(">  25,0 ******* ").append(dePct(0.444)).append("\n");
-    assertThat(histogramFormatterGermany.format(fourBucketHistogram())).isEqualTo(gsb.toString());
+    String expectedLine1 = "<= 1,0  *****   " + dePct(0.333) + "\n";
+    String expectedLine2 = "<= 5,0  ****    " + dePct(0.222) + "\n";
+    String expectedLine3 = "<= 25,0          " + dePct(0) + "\n";
+    String expectedLine4 = ">  25,0 ******* " + dePct(0.444) + "\n";
+
+    int width = expectedLine1.length() - 1;
+    String expected = expectedLine1 + expectedLine2 + expectedLine3 + expectedLine4;
+
+    assertThat(histoFormatterGermany(width).format(fourBucketHistogram())).isEqualTo(expected);
   }
 
   @Test
   public void format_fourBuckets_withHexFormat_shouldWork() {
-    assertThat(histogramFormatterDoubleAsHex.format(fourBucketHistogram())).isEqualTo("" //
+    assertThat(histogramFormatterDoubleAsHex(29).format(fourBucketHistogram())).isEqualTo("" //
         + "<= 0x1.0p0 ********   33.333%\n" //
         + "<= 0x1.4p2 *****      22.222%\n" //
         + "<= 0x1.9p4                 0%\n" //

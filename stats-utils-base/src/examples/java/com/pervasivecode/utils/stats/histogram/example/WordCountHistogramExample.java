@@ -68,7 +68,7 @@ public class WordCountHistogramExample implements ExampleApplication {
             .setUpperBoundValueFormatter((v) -> usNumberFormat.format(v)) //
             .setLabelForSingularBucket("All") //
             .setPercentFormat(NumberFormat.getPercentInstance(Locale.US)) //
-            .setMaxBarGraphWidth(60) //
+            .setMaxWidth(69) //
             .build());
 
     output.println("As a histogram:");

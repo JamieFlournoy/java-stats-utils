@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.annotation.concurrent.Immutable;
 import com.google.auto.value.AutoValue;
-import com.google.auto.value.extension.memoized.Memoized;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -45,21 +44,10 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
   }
 
   /**
-   * Get the maximum bucket count value.
-   *
-   * @return The largest bucket count value.
-   */
-  @Memoized
-  public long maxCount() {
-    return countByBucket().stream().max((a, b) -> a.compareTo(b)).get();
-  }
-
-  /**
    * Get a total of the bucket counts.
    *
    * @return The total of all bucket counts.
    */
-  @Memoized
   public long totalCount() {
     return countByBucket().stream().reduce(0L, (a, b) -> a + b);
   }

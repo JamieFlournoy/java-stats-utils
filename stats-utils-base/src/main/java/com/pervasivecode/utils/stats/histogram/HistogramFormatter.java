@@ -1,11 +1,10 @@
 package com.pervasivecode.utils.stats.histogram;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
-import static java.math.RoundingMode.HALF_EVEN;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Function;
+import com.pervasivecode.utils.stats.HorizontalBarGraph;
 
 /**
  * Format {@link Histogram} contents for a text display. The formatted output consists of a vertical
@@ -38,7 +37,7 @@ public class HistogramFormatter<T> {
   public HistogramFormatter(HistogramFormat<T> format) {
     this.format = Objects.requireNonNull(format);
 
-    checkArgument(format.maxBarGraphWidth() > 1, "maxWidth must be at least 2.");
+    checkArgument(format.maxWidth() > 1, "maxWidth must be at least 10.");
   }
 
   public String format(Histogram<T> histogram) {
@@ -48,53 +47,29 @@ public class HistogramFormatter<T> {
 
   private String formatInternal(ImmutableHistogram<T> histogram) {
     final int bucketCount = histogram.numBuckets();
-    checkState(bucketCount > 0);
+
+    ArrayList<String> bucketLabels = new ArrayList<>(bucketCount);
+    ArrayList<Long> magnitudes = new ArrayList<>(bucketCount);
+    ArrayList<String> formattedPercentages = new ArrayList<>(bucketCount);
+
     final int lastBucket = bucketCount - 1;
-
-    final String[] bucketLabels = new String[bucketCount];
-    final String[] formattedPercentages = new String[bucketCount];
-
-    int maxBucketLabelLength = 0;
-    int maxWidthOfPercent = 0;
     for (int i = 0; i <= lastBucket; i++) {
-      final String bucketLabel = getBucketLabel(i, lastBucket, histogram);
-      bucketLabels[i] = bucketLabel;
-      if (maxBucketLabelLength < bucketLabel.length()) {
-        maxBucketLabelLength = bucketLabel.length();
-      }
+      bucketLabels.add(getBucketLabel(i, lastBucket, histogram));
+
+      magnitudes.add(histogram.countInBucket(i));
 
       final double percent = (double) histogram.countInBucket(i) / histogram.totalCount();
-      final String formattedPercentage = format.percentFormat().format(percent);
-      formattedPercentages[i] = formattedPercentage;
-
-      final int widthOfFormattedPercent = formattedPercentage.length();
-      if (widthOfFormattedPercent > maxWidthOfPercent) {
-        maxWidthOfPercent = widthOfFormattedPercent;
-      }
+      formattedPercentages.add(format.percentFormat().format(percent));
     }
 
-    final String labelFormat = "%-" + maxBucketLabelLength + "s";
-    final String percentFormat = "%" + maxWidthOfPercent + "s";
-
-    final long maxCount = histogram.maxCount();
-    final int maxBarGraphWidth = format.maxBarGraphWidth();
-    final double widthPerBucketUnit = ((double) maxBarGraphWidth) / maxCount;
-
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i <= lastBucket; i++) {
-      final double numStars = histogram.countInBucket(i) * widthPerBucketUnit;
-      final int numWholeStars = new BigDecimal(numStars).setScale(0, HALF_EVEN).intValueExact();
-
-      sb.append(String.format(labelFormat, bucketLabels[i]));
-      sb.append(' ');
-      for (int b = 0; b < maxBarGraphWidth; b++) {
-        sb.append(b < numWholeStars ? '*' : ' ');
-      }
-      sb.append(' ');
-      sb.append(String.format(percentFormat, formattedPercentages[i]));
-      sb.append('\n');
-    }
-    return sb.toString();
+    HorizontalBarGraph graph = HorizontalBarGraph.builder() //
+        .setWidth(format.maxWidth()) //
+        .setNumRows(bucketCount) //
+        .setLabels(bucketLabels) //
+        .setMagnitudes(magnitudes) //
+        .setFormattedMagnitudes(formattedPercentages) //
+        .build();
+    return graph.toString();
   }
 
   private String getBucketLabel(int bucketIndex, int lastBucket, Histogram<T> histogram) {
