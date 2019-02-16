@@ -19,6 +19,8 @@ import com.google.common.collect.ImmutableList;
 @AutoValue
 @Immutable // <- so that static analysis tools will verify that it really is immutable
 public abstract class ImmutableHistogram<T> implements Histogram<T> {
+  // TODO move the javadoc describing properties' meanings from the Builder to the top-level class.
+
   static final String NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE =
       "There is no upper bound for the last bucket.";
 
@@ -140,7 +142,7 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
       try {
         immutableUpperBounds = ImmutableList.copyOf(unvalidated.bucketUpperBounds());
       } catch (NullPointerException npe) {
-        throw new IllegalStateException("upperBounds cannot contain any null values.", npe);
+        throw new IllegalStateException("bucketUpperBounds cannot contain any null values.", npe);
       }
 
       return ImmutableHistogram.builder(unvalidated) //

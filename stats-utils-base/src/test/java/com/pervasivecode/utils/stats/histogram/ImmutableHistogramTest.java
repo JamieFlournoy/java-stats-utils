@@ -42,11 +42,11 @@ public class ImmutableHistogramTest {
     ImmutableHistogram<Integer> copy = ImmutableHistogram.builder(original).build();
     assertThat(original).isEqualTo(copy);
   }
-  
+
   //
   // Tests for build() validation.
   //
-  
+
   @Test
   public void build_withNoCounts_shouldThrow() {
     try {
@@ -146,6 +146,22 @@ public class ImmutableHistogramTest {
   }
 
   @Test
+  public void build_withNullBucketUpperBound_shouldThrow() {
+    ImmutableHistogram.Builder<Byte> builder = makeHistogramOfByteBuilder();
+    ArrayList<Byte> upperBoundValues = new ArrayList<>();
+    upperBoundValues.add((byte) 0x01);
+    upperBoundValues.add(null);
+    builder.setBucketUpperBounds(upperBoundValues);
+    try {
+      builder.build();
+      Truth.assert_().fail("Expected exception due to a null element of bucketUpperBounds");
+    } catch (IllegalStateException ise) {
+      assertThat(ise).hasMessageThat().contains("null");
+      assertThat(ise).hasMessageThat().contains("bucketUpperBounds");
+    }
+  }
+
+  @Test
   public void build_withAllRequiredProperties_shouldBuild() {
     ImmutableHistogram.Builder<Byte> builder = makeHistogramOfByteBuilder();
     builder.build();
@@ -159,18 +175,34 @@ public class ImmutableHistogramTest {
         .setBucketUpperBounds(bucketUpperBounds) //
         .setCountByBucket(countByBucket) //
         .build();
-    
+
     assertThat(histogram.bucketUpperBounds()).isEqualTo(bucketUpperBounds);
     assertThat(histogram.bucketUpperBounds()).isInstanceOf(ImmutableList.class);
-    
+
     assertThat(histogram.countByBucket()).isEqualTo(countByBucket);
     assertThat(histogram.countByBucket()).isInstanceOf(ImmutableList.class);
+
+    // Verify that just the countByBucket field can be mutable and will still be fixed.
+    histogram = ImmutableHistogram.<Integer>builder(histogram) //
+        .setCountByBucket(countByBucket) //
+        .build();
+    assertThat(histogram.countByBucket()).isEqualTo(countByBucket);
+    assertThat(histogram.countByBucket()).isInstanceOf(ImmutableList.class);
+
+    // Verify that just the bucketUpperBounds field can be mutable and will still be fixed.
+    histogram = ImmutableHistogram.<Integer>builder(histogram) //
+        .setBucketUpperBounds(bucketUpperBounds) //
+        .build();
+    assertThat(histogram.bucketUpperBounds()).isEqualTo(bucketUpperBounds);
+    assertThat(histogram.bucketUpperBounds()).isInstanceOf(ImmutableList.class);
+
+
   }
 
   //
   // Tests for bucketUpperBound
   //
-  
+
   @Test
   public void bucketUpperBound_shouldWork() {
     ImmutableHistogram.Builder<Byte> builder = makeHistogramOfByteBuilder();
@@ -197,7 +229,7 @@ public class ImmutableHistogramTest {
   //
   // Tests for countInBucket and totalCount
   //
-  
+
   @Test
   public void countInBucket_shouldWork() {
     ImmutableHistogram<Byte> histogram = ImmutableHistogram.<Byte>builder() //

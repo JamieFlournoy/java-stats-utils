@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.common.collect.ImmutableList;
+import com.google.common.truth.Truth;
 
 public class HistogramFormatterTest {
   // TODO Simplify this test. Move some of this into HorizontalBarGraphTest.
@@ -78,6 +79,16 @@ public class HistogramFormatterTest {
 
   private String dePct(double value) {
     return germanyPercentFormat.format(value);
+  }
+
+  @Test
+  public void format_withNullHistogram_shouldThrow() {
+    try {
+      histogramFormatterUs(20).format(null);
+      Truth.assert_().fail("Expected an exception due to the null histogram parameter.");
+    } catch (NullPointerException npe) {
+      assertThat(npe).hasMessageThat().contains("histogram");
+    }
   }
 
   @Test

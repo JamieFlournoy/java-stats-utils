@@ -1,6 +1,6 @@
 package com.pervasivecode.utils.stats.histogram;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -39,12 +39,10 @@ public class HistogramFormatter<T> {
    */
   public HistogramFormatter(HistogramFormat<T> format) {
     this.format = Objects.requireNonNull(format);
-
-    checkArgument(format.maxWidth() > 1, "maxWidth must be at least 10.");
   }
 
   public String format(Histogram<T> histogram) {
-    checkArgument(histogram != null, "histogram is required.");
+    requireNonNull(histogram, "histogram is required.");
     return formatInternal(ImmutableHistogram.from(histogram));
   }
 
