@@ -40,7 +40,7 @@ public abstract class HorizontalBarGraph {
     final int maxLabelWidth = formattingHints().maxLabelWidth;
     final long maxMagnitude = formattingHints().maxMagnitude;
 
-    final boolean showBar = (maxBarWidth > 0);
+    final boolean showBar = (maxBarWidth > 0) && maxMagnitude > 0;
     final double barWidthPerUnitMagnitude = showBar ? (((double) maxBarWidth) / maxMagnitude) : 0.0;
     final char barPart = barPart();
 

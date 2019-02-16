@@ -116,33 +116,48 @@ public class HorizontalBarGraphTest {
   }
 
   @Test
-  public void format_shouldWork() {
+  public void format_withRoomForBarPart_shouldWork() {
     HorizontalBarGraph.Builder builder = validBuilder();
     assertThat(builder.build().format()).isEqualTo("" //
         + "A ->  ############ x\n" //
         + "B ->  ####         y\n" //
         + "C --> #            z\n");
 
-    HorizontalBarGraph graph = builder.setWidth(10).build();
+    builder.setWidth(10).build();
     assertThat(builder.build().format()).isEqualTo("" //
         + "A ->  ## x\n" //
         + "B ->  #  y\n" //
         + "C -->    z\n");
 
-    graph = builder.setWidth(9).build();
+    builder.setWidth(9).build();
     assertThat(builder.build().format()).isEqualTo("" //
         + "A ->  # x\n" //
         + "B ->    y\n" //
         + "C -->   z\n");
+  }
 
-    graph = builder.setWidth(8).build();
-    String noBarExpected = "" //
+  @Test
+  public void format_withNoRoomForBarPart_shouldWork() {
+    HorizontalBarGraph.Builder builder = validBuilder();
+    String expected = "" //
         + "A ->  x\n" //
         + "B ->  y\n" //
         + "C --> z\n";
-    assertThat(graph.format()).isEqualTo(noBarExpected);
 
-    graph = builder.setWidth(7).build();
-    assertThat(graph.format()).isEqualTo(noBarExpected);
-}
+    builder.setWidth(8);
+    assertThat(builder.build().format()).isEqualTo(expected);
+
+    builder.setWidth(7);
+    assertThat(builder.build().format()).isEqualTo(expected);
+  }
+
+  @Test
+  public void build_withAllZeroMagnitudes_shouldWork() {
+    HorizontalBarGraph.Builder builder = validBuilder();
+    builder.setMagnitudes(ImmutableList.of(0L, 0L, 0L));
+    assertThat(builder.build().format()).isEqualTo("" //
+        + "A ->  x\n" //
+        + "B ->  y\n" //
+        + "C --> z\n");
+  }
 }
