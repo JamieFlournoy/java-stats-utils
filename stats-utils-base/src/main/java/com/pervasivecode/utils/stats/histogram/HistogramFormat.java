@@ -24,7 +24,7 @@ public abstract class HistogramFormat<T> {
   /**
    * The string label to use when the Histogram contains exactly one bucket.
    *
-   * @return
+   * @return The label to use for a single-bucket histogram.
    */
   public abstract String labelForSingularBucket();
 
@@ -55,6 +55,7 @@ public abstract class HistogramFormat<T> {
    * <li>labelForSingularBucket = "?"</li>
    * </ul>
    *
+   * @param <T> The type of value handled by the HistogramFormat that this Builder will make.
    * @return The new {@link HistogramFormat.Builder} instance.
    */
   public static <T> HistogramFormat.Builder<T> builder() {

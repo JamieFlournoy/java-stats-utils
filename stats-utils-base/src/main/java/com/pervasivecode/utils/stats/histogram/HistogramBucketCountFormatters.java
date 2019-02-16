@@ -33,7 +33,7 @@ public class HistogramBucketCountFormatters {
    * configure the percentage formatter, you can use the {@link #percentFormatter(NumberFormat)}
    * version of this method instead.
    *
-   * @param Locale The locale to use when obtaining a default percentage {@link NumberFormat}.
+   * @param formatLocale The locale to use when obtaining a default percentage {@link NumberFormat}.
    * @return A BiFunction wrapping the default percent format for the specified Locale.
    */
   public static BiFunction<Long, Long, String> percentFormatter(Locale formatLocale) {

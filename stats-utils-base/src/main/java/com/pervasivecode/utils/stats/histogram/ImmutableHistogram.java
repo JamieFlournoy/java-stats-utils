@@ -17,10 +17,8 @@ import com.google.common.collect.ImmutableList;
  * @see BucketingSystem
  */
 @AutoValue
-@Immutable // <- so that static analysis tools will verify that it really is immutable
+@Immutable // <- so that static analysis tools will verify that this class really is immutable
 public abstract class ImmutableHistogram<T> implements Histogram<T> {
-  // TODO move the javadoc describing properties' meanings from the Builder to the top-level class.
-
   static final String NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE =
       "There is no upper bound for the last bucket.";
 
@@ -81,6 +79,7 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
 
   /**
    * An object that can be used to create an {@link ImmutableHistogram}.
+   *
    * @param <T> The type of value counted by the ImmutableHistogram that this Builder will make.
    */
   @AutoValue.Builder
@@ -122,12 +121,12 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
       int numUpperBounds = unvalidated.bucketUpperBounds().size();
       int expectedNumUpperBounds = unvalidated.countByBucket().size() - 1;
       checkState(numUpperBounds == expectedNumUpperBounds,
-            "Wrong number of bucketUpperBounds values. (Expected %s, got %s)",
-                expectedNumUpperBounds, numUpperBounds);
+          "Wrong number of bucketUpperBounds values. (Expected %s, got %s)", expectedNumUpperBounds,
+          numUpperBounds);
 
       // Ensure that the countByBucket and bucketUpperBounds lists are really immutable.
-      if (unvalidated.countByBucket() instanceof ImmutableList &&
-          unvalidated.bucketUpperBounds() instanceof ImmutableList) {
+      if (unvalidated.countByBucket() instanceof ImmutableList
+          && unvalidated.bucketUpperBounds() instanceof ImmutableList) {
         return unvalidated;
       }
 
@@ -183,6 +182,7 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
    * returned. (This is different from {@link #copyOf(Histogram)}, which will always return a copy.}
    *
    * @param histogram The {@code Histogram} to return as an {@code ImmutableHistogram}.
+   * @param <V> The type of value counted by this Histogram.
    * @return A copy of the input histogram, or (if the input histogram is already an
    *         {@code ImmutableHistogram}, the input histogram.
    */
