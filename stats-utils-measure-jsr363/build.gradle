@@ -17,7 +17,7 @@ dependencies {
     // JSR 385 which is newer; see
     // https://github.com/unitsofmeasurement/indriya
 
-    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.3-SNAPSHOT'
+    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.3'
 }
 
 javadoc {
@@ -28,7 +28,7 @@ javadoc {
         // a list of Java package names of classes which are
         // documented in the Javadocs rooted at the specified URL.)
         linksOffline "https://www.javadoc.io/page/javax.measure/unit-api/1.0/", '../gradle/javadocs/unit-api/1.0'
-        linksOffline "https://www.javadoc.io/page/com.pervasivecode/measurement-utils-jsr363/0.9/", '../gradle/javadocs/measurement-utils-jsr363/0.9'
+        linksOffline "https://www.javadoc.io/page/com.pervasivecode/measurement-utils-jsr363/0.9.3/", '../gradle/javadocs/measurement-utils-jsr363/0.9.3'
         linksOffline "https://www.javadoc.io/page/com.pervasivecode/stats-utils/0.9/", '../gradle/javadocs/stats-utils/0.9'
     }
 }
@@ -46,7 +46,7 @@ publishing {
                 // response. Likewise, publishing assets to a release
                 // staging repository will only work if this version
                 // does _not_ end in "-SNAPSHOT".
-                version = '0.9.6-SNAPSHOT'
+                version = '0.9.6'
 
                 pom {
                     name = 'Java Statistics Utilities for JSR 363'
