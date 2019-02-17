@@ -52,7 +52,7 @@ subprojects {
 
         // Dependencies needed at runtime and compile-time, but not
         // exposed in the API of this library:
-        implementation 'com.google.guava:guava:27.0-jre'
+        implementation 'com.google.guava:guava:27.0.1-jre'
 
         // Dependencies needed for running tests:
         testImplementation 'junit:junit:4.12'
@@ -118,7 +118,7 @@ subprojects {
         cucumberTestImplementation 'io.cucumber:cucumber-java8:4.2.0'
         cucumberTestImplementation 'junit:junit:4.12'
         cucumberTestImplementation "com.google.truth:truth:0.42"
-        cucumberTestImplementation  group: 'com.google.guava', name: 'guava', version: '27.0-jre'
+        cucumberTestImplementation  group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
     }
     sourceSets {
         cucumberTest {
@@ -157,7 +157,7 @@ subprojects {
             // a list of Java package names of classes which are
             // documented in the Javadocs rooted at the specified URL.)
             linksOffline "https://docs.oracle.com/javase/10/docs/api/", '../gradle/javadocs/jdk/10'
-            linksOffline "https://google.github.io/guava/releases/27.0-jre/api/docs/", '../gradle/javadocs/guava/27.0-jre'
+            linksOffline "https://google.github.io/guava/releases/27.0.1-jre/api/docs/", '../gradle/javadocs/guava/27.0.1-jre'
         }
     }
 
