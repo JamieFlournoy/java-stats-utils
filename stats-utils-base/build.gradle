@@ -11,6 +11,14 @@ dependencies {
 
 javadoc {
     title = 'stats-utils API'
+    options {
+        // Generate Javadocs links even when offline, using the
+        // element-list or package-list file copied from the public
+        // Javadocs to a local subdir. (The package-list file contains
+        // a list of Java package names of classes which are
+        // documented in the Javadocs rooted at the specified URL.)
+        linksOffline "https://www.javadoc.io/page/com.pervasivecode/time-utils/0.11/", '../gradle/javadocs/time-utils/0.11'
+    }
 }
 
 publishing {
