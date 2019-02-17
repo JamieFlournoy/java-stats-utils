@@ -17,7 +17,7 @@ plugins {
 
     // This adds ErrorProne, which warns about source code that looks
     // like it's likely to be a bug, or to lead to future bugs.
-    id "net.ltgt.errorprone" version "0.6.1"
+    id "net.ltgt.errorprone" version "0.7"
 
     // This plugin provides integration test tasks using the Cucumber
     // behavior-driven development tool.
@@ -60,7 +60,7 @@ subprojects {
         testImplementation "com.google.truth:truth:0.42"
 
         // To make the Eclipse Gradle plugin put Cucumber jars on the source path:
-        testImplementation 'io.cucumber:cucumber-java8:4.2.0'
+        testImplementation 'io.cucumber:cucumber-java8:4.2.3'
 
         // Dependencies needed when running ErrorProne checks:
         errorprone "com.google.errorprone:error_prone_core:2.3.2"
@@ -115,7 +115,7 @@ subprojects {
         maxParallelForks = 4
     }
     dependencies {
-        cucumberTestImplementation 'io.cucumber:cucumber-java8:4.2.0'
+        cucumberTestImplementation 'io.cucumber:cucumber-java8:4.2.3'
         cucumberTestImplementation 'junit:junit:4.12'
         cucumberTestImplementation "com.google.truth:truth:0.42"
         cucumberTestImplementation  group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
