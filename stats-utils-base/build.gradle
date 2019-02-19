@@ -4,7 +4,7 @@ cucumberTest {
 
 dependencies {
     implementation group: 'com.google.auto.value', name: 'auto-value-annotations', version: '1.6.3'
-    implementation group: 'com.pervasivecode', name: 'time-utils', version: '0.11'
+    implementation group: 'com.pervasivecode', name: 'time-utils', version: '1.0'
 
     annotationProcessor group: 'com.google.auto.value', name: 'auto-value', version: '1.6.3'
 }
@@ -17,7 +17,7 @@ javadoc {
         // Javadocs to a local subdir. (The package-list file contains
         // a list of Java package names of classes which are
         // documented in the Javadocs rooted at the specified URL.)
-        linksOffline "https://www.javadoc.io/page/com.pervasivecode/time-utils/0.11/", '../gradle/javadocs/time-utils/0.11'
+        linksOffline "https://www.javadoc.io/page/com.pervasivecode/time-utils/1.0/", '../gradle/javadocs/time-utils/1.0'
     }
 }
 
