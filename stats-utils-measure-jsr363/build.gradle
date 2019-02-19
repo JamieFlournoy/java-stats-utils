@@ -17,7 +17,7 @@ dependencies {
     // JSR 385 which is newer; see
     // https://github.com/unitsofmeasurement/indriya
 
-    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '0.9.3'
+    api group: 'com.pervasivecode', name: 'measurement-utils-jsr363', version: '1.0'
 }
 
 javadoc {
@@ -28,8 +28,8 @@ javadoc {
         // a list of Java package names of classes which are
         // documented in the Javadocs rooted at the specified URL.)
         linksOffline "https://www.javadoc.io/page/javax.measure/unit-api/1.0/", '../gradle/javadocs/unit-api/1.0'
-        linksOffline "https://www.javadoc.io/page/com.pervasivecode/measurement-utils-jsr363/0.9.3/", '../gradle/javadocs/measurement-utils-jsr363/0.9.3'
-        linksOffline "https://www.javadoc.io/page/com.pervasivecode/stats-utils/0.9.6/", '../gradle/javadocs/stats-utils/0.9.6'
+        linksOffline "https://www.javadoc.io/page/com.pervasivecode/measurement-utils-jsr363/1.0/", '../gradle/javadocs/measurement-utils-jsr363/1.0'
+        linksOffline "https://www.javadoc.io/page/com.pervasivecode/stats-utils/1.0/", '../gradle/javadocs/stats-utils/1.0'
     }
 }
 
