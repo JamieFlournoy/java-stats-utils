@@ -19,6 +19,8 @@ import com.google.common.collect.ImmutableList;
 @AutoValue
 @Immutable // <- so that static analysis tools will verify that this class really is immutable
 public abstract class ImmutableHistogram<T> implements Histogram<T> {
+  protected ImmutableHistogram() {}
+
   static final String NO_UPPER_BOUND_IN_LAST_BUCKET_MESSAGE =
       "There is no upper bound for the last bucket.";
 
@@ -84,6 +86,8 @@ public abstract class ImmutableHistogram<T> implements Histogram<T> {
    */
   @AutoValue.Builder
   public abstract static class Builder<T> {
+    protected Builder() {}
+
     /**
      * Set the count of values per bucket, all at once. This list's size defines the number of
      * buckets of the histogram.

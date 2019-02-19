@@ -14,6 +14,8 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 @Immutable
 public abstract class HistogramFormat<T> {
+  protected HistogramFormat() {}
+
   /**
    * A function that formats a bucket upper bound value as a String.
    *
@@ -70,6 +72,8 @@ public abstract class HistogramFormat<T> {
    */
   @AutoValue.Builder
   public static abstract class Builder<T> {
+    protected Builder() {}
+
     public abstract HistogramFormat.Builder<T> setUpperBoundValueFormatter(
         Function<T, String> upperBoundValueFormatter);
 
