@@ -37,9 +37,10 @@ subprojects {
         jcenter()
         mavenLocal()
 
-        // Uncomment to allow a dependency on a non-release
-        // (-SNAPSHOT) version of a library from the Sonatype OSSRH
-        // snapshot repository:
+        // Sonatype OSSRH repo, added since there is sync lag to
+        // mavenCentral and jcenter.
+        maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+
         // maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
