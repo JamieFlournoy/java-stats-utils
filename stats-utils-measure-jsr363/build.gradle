@@ -46,7 +46,7 @@ publishing {
                 // response. Likewise, publishing assets to a release
                 // staging repository will only work if this version
                 // does _not_ end in "-SNAPSHOT".
-                version = '1.0-SNAPSHOT'
+                version = '1.0'
 
                 pom {
                     name = 'Java Statistics Utilities for JSR 363'
