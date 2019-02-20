@@ -6,11 +6,11 @@ This library includes classes for building and formatting histograms, and  for e
 
 This repository contains two Gradle subprojects, each of which generates a library published as a separate Maven artifact:
 
-`com.pervasivecode:stats-utils:0.9.2`
+`com.pervasivecode:stats-utils:1.0`
 
 and
 
-`com.pervasivecode:stats-utils-measure-jsr363:0.9.2`.
+`com.pervasivecode:stats-utils-measure-jsr363:1.0`.
 
 The `stats-utils-measure-jsr363` is an extension of, and therefore depends on, the `stats-utils` library.
 
@@ -28,9 +28,65 @@ For stats-utils-measure-jsr363:
 
 See the separate [OVERVIEW.md](OVERVIEW.md) file for a description of what interfaces and classes are included. (Overview content is taken from class Javadoc comments, so there's no need to read both.)
 
+## Including it in your project
+
+### Stats-utils:
+
+Use groupId `com.pervasivecode`, name `stats-utils`, version `1.0` in your build tool of choice.
+
+### Stats-utils-measure-jsr363:
+
+Use groupId `com.pervasivecode`, name `stats-utils-measure-jsr363`, version `1.0` in your build tool of choice.
+
+
+### Gradle Example
+
+If you are using Gradle 4.x, put this in your build.properties file:
+
+```
+// in your build.gradle's repositories {} block:
+    mavenCentral();
+
+// in your build.gradle's dependencies {} block:
+    implementation 'com.pervasivecode:stats-utils:1.0'
+
+    // and optionally
+    implementation 'com.pervasivecode:stats-utils-measure-jsr363:1.0'
+
+// or, if you prefer the separated group/name/version syntax:
+    implementation group: 'com.pervasivecode', name: 'stats-utils', version: '1.0'
+
+    // and optionally
+    implementation group: 'com.pervasivecode', name: 'stats-utils-measure-jsr363', version: '1.0'
+```
+
+
+
+
 ## How to use it in your code
 
-See the [Example Code](OVERVIEW.md#example-code) section in [OVERVIEW.md](OVERVIEW.md) for details.
+See the [Example Code][] section in [OVERVIEW.md](OVERVIEW.md) for details.
 
 
 
+## How to use it in your code
+
+See the [Example Code][] section in [OVERVIEW.md](OVERVIEW.md) for details.
+
+## Contributing
+
+See [DEVELOPERS.md](DEVELOPERS.md) and [GRADLE_INTRO.md](GRADLE_INTRO.md) if you want to build and hack on the code yourself.
+
+
+## Copyright and License
+
+Copyright © 2018 Jamie Flournoy.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+[example code]: OVERVIEW.md#example-code
