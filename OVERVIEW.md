@@ -42,6 +42,9 @@ This is a mutable version of the `Histogram` interface, adding a method for coun
 
 ### In package com.pervasivecode.utils.stats:
 
+#### [HorizontalBarGraph](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/HorizontalBarGraph.java)
+
+A textual representation of a set of values, in the form of a bar graph growing rightward from an axis on left.
 
 #### [SimpleDurationEstimator](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/SimpleDurationEstimator.java)
 This is a trivial `DurationEstimator` that just uses the total amount processed divided by the total time elapsed to estimate the rate (that is, it's blind to any short-term fluctuations in rate that may occur, and only examines the entire process).
@@ -54,11 +57,20 @@ This is a trivial `DurationEstimator` that just uses the total amount processed 
 #### [ConcurrentHistogram](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/ConcurrentHistogram.java)	
 A thread-safe `Histogram` based on the [java.util.concurrent.atomic.AtomicLongArray](https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/atomic/AtomicLongArray.html?is-external=true) class.
 
-#### [ConsoleHistogramFormatter](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/ConsoleHistogramFormatter.java)
+#### [FunctionBasedBucketSelector](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/FunctionBasedBucketSelector.java)
+A BucketSelector based on a pair of Functions, one of which converts values into bucket indices, the other of which converts bucket indices into upper-bound values.
+
+#### [HistogramBucketCountFormatters](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/HistogramBucketCountFormatters.java)
+
+Factory methods for use with HistogramFormat.Builder.setBucketCountFormatter(BiFunction).
+
+
+#### [HistogramFormat](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/HistogramFormat.java)
+Configuration for a `HistogramFormatter`.
+
+#### [HistogramFormatter](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/HistogramFormatter.java)
 Format `Histogram` contents for a text display.
 
-#### [ConverterBasedBucketSelector](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/ConverterBasedBucketSelector.java)
-A `BucketSelector` based on a [Converter](https://google.github.io/guava/releases/27.0-jre/api/docs/com/google/common/base/Converter.html?is-external=true) between upper-bound-values and bucket indices.
 
 #### [Histograms](stats-utils-base/src/main/java/com/pervasivecode/utils/stats/histogram/Histograms.java)
 Utility methods for working with `Histogram`s.
@@ -70,9 +82,6 @@ An immutable representation of a `Histogram`.
 This `BucketSelector` counts values in buckets that have an irregular set of bucket upper bound values, such as {1, 5, 7}, that are most easily expressed explicitly, rather than by a formula that generates a series of upper bound values.
 
 ### In package com.pervasivecode.utils.stats.histogram.measure:
-
-#### [ConsoleHistogramQuantityFormatter](stats-utils-measure-jsr363/src/main/java/com/pervasivecode/utils/stats/histogram/measure/ConsoleHistogramQuantityFormatter.java) _(only in stats-utils-measure-jsr363)_
-Format `Histogram<Quantity<T>>` contents for a text display.
 
 #### [ImmutableQuantityHistogram](stats-utils-measure-jsr363/src/main/java/com/pervasivecode/utils/stats/histogram/measure/ImmutableQuantityHistogram.java) _(only in stats-utils-measure-jsr363)_
 
